@@ -36,6 +36,21 @@ test_users = pd.DataFrame({
     'momentum': [0.25, 0.5, 0.5, 1, 1]
 })
 
+#stocks and sectors
+stock_sector_map = {
+    "Basic_Materials" : [ "AMWD", "ATCOL", "CRML", "GSM", "IPX", "MERC", "NB", "SGML", "UFPI", "VOXR"],
+    "Consumer_Discretionary" : [ "AMZN", "BKNG", "COST", "CTAS", "MAR", "MELI", "NFLX", "PDD", "SBUX", "TSLA"],
+    "Consumer_Staples" : [ "CCEP", "CELH", "COKE", "KDP", "KHC", "MDLZ", "MNST", "PEP", "PPC", "WBA"],
+    "Energy" : [ "APA", "CHRD", "EXE", "FANG", "PAA", "VNOM", "WWD"],
+    "Finance" : [ "ABNB", "ACGL", "CME", "COIN", "CSGP", "HBANM", "NDAQ", "TROW", "TW", "WTW"],
+    "Healthcare" : [ "AMGN", "AZN", "DXCM", "GILD", "IDXX", "ISRG", "MRNA", "REGN", "SNY", "VRTX"],
+    "Industrials" : [ "AXON", "BKR", "CSX", "FER", "HON", "LIN", "ODFL", "ROP", "SYM", "TER"],
+    "Real Estate" : [ "AGNC", "AGNCL", "AGNCM", "AGNCN", "EQIX", "GLPI", "HST", "LAMR", "REG", "SBAC"],
+    "Technology" : [ "AAPL", "AMD", "ASML", "AVGO", "GOOG", "GOOGL", "META", "MSFT", "NVDA", "QCOM"],
+    "Telecommunications" : [ "CHTR", "CMCSA", "CSCO", "FYBR", "LBRDA", "LBRDK", "ROKU", "TMUS", "VOD", "WBD"],
+    "Utilities" : [ "AEP", "CEG", "CWST", "EVRG", "EXC", "LNT", "NFE", "NWE", "OTTR", "XEL"]
+}
+#ED_comparison functionalities
 def get_boosted_score(stock):
     # Check stock sentiment
     stock_boost = stock_sentiment[
@@ -65,10 +80,10 @@ def get_boosted_score(stock):
 def euclidean_distance_comparison(n=10):
     """
     input
-    n (int) : number of stocks to be recommended
+        n (int) : number of stocks to be recommended
 
     return
-    results
+        results_df (DataFrame): DataFrame of results for each user persona
     """
     results = []
     file_name = f"../data_storage/dated_features/{DATE_MONTH}m_back.csv"
@@ -142,5 +157,81 @@ def euclidean_distance_comparison(n=10):
                 'stdev_return_12m': stdev_return_12m,
                 'sharpe_ratio_12m': sharpe_ratio_12m
         })
+    results_df = pd.DataFrame(results)
+    return results_df
 
-    return pd.DataFrame(results)
+def calculate_similarities(user_vector, stock_vectors):
+    """
+    input
+        user_vector (pd.Series)     : [1x9] vectors of the user to be compared
+        stock_vectors (pd.Series)   : [Nx9] vectors of the user to be compared (N = num of stocks)
+    return
+        raw_results (DataFrame)     : DataFrame of stock Data with calculated similarities
+    """
+    results = []
+    file_name = f"../data_storage/dated_features/{DATE_MONTH}m_back.csv"
+    if not os.path.exists(file_name):
+        print(f"File {file_name} not found..")
+        return
+
+    stock_features = pd.read_csv(file_name, usecols=range(1, 15))
+
+    # Euclidean distance
+    euclidean_distances = cdist(user_vector, stock_vectors, metric='euclidean')
+
+    # Convert distances to similarity scores (inverted: smaller distance = higher similarity)
+    similarity_scores = 1 / (1 + euclidean_distances) 
+
+    raw_results = stock_features.copy()
+    raw_results['similarity'] = similarity_scores
+
+    # Apply sentiment boosting
+    raw_results['boosted_similarity'] = raw_results.apply(
+        lambda row: row['similarity'] + get_boosted_score(
+            row['stock']
+        ), axis=1
+    )
+
+    return raw_results.sort_values("boosted_similarity")
+
+def filter_stocks_by_sector(stock_data, chosen_sectors):
+    """
+        input
+            stock_data (pd.DataFrame)           : dataframe of stock data containing stock name and/or sector
+            chosen_sectors (list)               : list containing sectors chosen by the user.
+        output
+            filtered_stock_data (pd.DataFrame)  : dataframe of filtered stock data input
+    """
+    stock_to_sector = {stock: sector for sector, stocks in stock_sector_map.items() for stock in stocks}
+    
+    stocks = []
+
+    for sector in chosen_sectors:
+        stocks.extend(stock_sector_map[sector])
+
+    filtered_stock_data = stock_data[stock_data['stock'].isin(stocks)].copy()
+
+    # Add a sector column based on the stock_to_sector mapping
+    filtered_stock_data['sector'] = filtered_stock_data['stock'].map(stock_to_sector)
+
+    return filtered_stock_data
+def get_N_stocks(filtered_stock_data, N = 15):
+    """
+        filterd_stock_data (pd.DataFrame)   : filtered dataframe containing stock features of stocks in user chosen sectors (Must contain Boosted Similarities column)
+        N (int)                             : number of stocks to be outputted
+    """
+    try:
+        return filtered_stock_data.nlargest(N, 'boosted_similarity')
+    except:
+        print("\"boosted similarities\" not in column")
+        return -1
+
+def group_stocks_by_sector(stock_data):
+    """
+        input
+            stock_data (pd.DataFrame)           : dataframe of stock data containing stock name and/or sector
+        output
+            grouped_stock_data (pd.DataFrame)   : dataframe of filtered stock data, grouped by sector
+    """
+    
+    return stock_data.groupby("sector").apply(lambda x:x)
