@@ -7,14 +7,14 @@ data = {"message": "Hello, World!"}
 
 @app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template("about.html")
 
-@app.route('/submit', methods=['POST'])
-def result():
-    message = request.form.get("message")
-    print(message)
+@app.route('/navbar-select', methods=['POST'])
+def navselect():
+    selected_item = request.form.get("selected_item","Unknown")
+    print(selected_item)
     # return f'message: {message}', 200
-    return render_template('index.html')
+    return render_template(f'{selected_item}.html')
 
 @app.route('/get', methods=['GET'])
 def get_data():

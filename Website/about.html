@@ -15,12 +15,21 @@
       href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
       rel="stylesheet"
     />
+    <script>
+      function submitForm(navItem) {
+        document.getElementById("selectedItem").value = navItem;
+        document.getElementById("navbarForm").submit();
+      }
+    </script>
   </head>
   <body>
     <!-- Navbar Section -->
     <nav class="navbar">
+      <form id="navForm" action="navbar-select" method="POST">
+        <input type = "hidden" name="selected_item" id="selectedItem"
+      </form>
       <div class="navbar__container">
-        <a href="/Website/index.html" id="navbar__logo"><i class="muic-logo"></i>
+        <a href="index.html" id="navbar__logo"><i class="muic-logo"></i>
           <img id="muic" src="/Website/images/Mahidol_U.png" />
         </a>
         <div class="navbar__toggle" id="mobile-menu">
@@ -29,10 +38,10 @@
         </div>
         <ul class="navbar__menu">
           <li class="navbar__item">
-            <a href="/Website/about.html" class="navbar__links"> About</a>
+            <a href="about.html" class="navbar__links" onclick="submitForm('about')"> About</a>
           </li>
           <li class="navbar__btn">
-            <a href="/Website/quiz.html" class="button"> Get Started</a>
+            <a href="quiz.html" class="button" onclick="submitForm('quiz')"> Get Started</a>
           </li>
         </ul>
       </div>

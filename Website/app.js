@@ -299,24 +299,16 @@ localStorage.setItem("finalFeatureScoresWithSectors", JSON.stringify(finalOutput
 
 console.log("Final Feature Scores with Sectors BEFORE Submit:", finalOutput); // Debugging
 
-const submitBtn = document.querySelector(".submit-btn");
-if (submitBtn) {
-    submitBtn.addEventListener("click", () => {
-        // ✅ Retrieve stored sector selections (which already contains everything)
-        const sectorSelection = JSON.parse(localStorage.getItem("sectorSelection")) || {};
+window.addEventListener("DOMContentLoaded", () => {
+    const submitBtn = document.querySelector("#submit-btn");
 
-        // ✅ Save to localStorage to ensure it's available immediately after submission
-        localStorage.setItem("finalFeatureScores", JSON.stringify(sectorSelection));
-
-        // ✅ Debugging: Verify the final stored data (should contain quiz + sectors)
-        console.log("Final Feature Scores After Submission:", sectorSelection);
-
-        // ✅ Redirect to results page
-        window.location.href = "/Website/output.html";
-    });
-}
-
-
-
+    if (submitBtn) {
+        submitBtn.addEventListener("click", () => {
+            const finalOutput = JSON.parse(localStorage.getItem("finalFeatureScoresWithSectors"));
+            console.log("✅ Submit clicked, Final Feature Scores:", finalOutput);
+            window.location.href = "/Website/output.html";
+        });
+    }
+});
 
 
