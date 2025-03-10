@@ -47,22 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    document.querySelectorAll(".circle").forEach(circle => {
-        circle.addEventListener("click", () => {
-            let question = circle.dataset.question;
-            let value = circle.dataset.value;
-
-            // ✅ Remove previous selection for the same question
-            document.querySelectorAll(`.circle[data-question="${question}"]`).forEach(c => c.classList.remove("selected-strongly-disagree", "selected-disagree", "selected-neutral", "selected-agree", "selected-strongly-agree"));
-
-            // ✅ Add selected class based on value
-            circle.classList.add(`selected-${value}`);
-
-            // ✅ Save response persistently
-            saveResponse(question, value);
-        });
-    });
-
     // ✅ Enable Next Question Logic
     function enableNextQuestion() {
         const quizzes = document.querySelectorAll(".quiz");
@@ -72,10 +56,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 const nextQuiz = quizzes[index + 1];
 
                 // ✅ Ensure next question starts disabled
-                nextQuiz.classList.add("disabled");
-                nextQuiz.style.pointerEvents = "none";
-                nextQuiz.style.opacity = "0.5";
-
+                if (nextQuiz.querySelectorAll(".circle").length == 5) {
+                    nextQuiz.classList.add("disabled");
+                    nextQuiz.style.pointerEvents = "none";
+                    nextQuiz.style.opacity = "0.5";
+                } else {
+                    nextQuiz.classList.remove("disabled");
+                    nextQuiz.style.opacity = "1";
+                }
                 quiz.querySelectorAll(".circle").forEach(circle => {
                     circle.addEventListener("click", () => {
                         let question = circle.dataset.question;
@@ -97,9 +85,43 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    function enableSelected() {
+        document.querySelectorAll(".quiz.disabled").forEach((quiz, index) => {
+            quiz.querySelectorAll(".circle").forEach((circle,index) => {
+                
+                if(circle.classList.length > 1) {
+                    console.log(circle.classList);
+                    quiz.classList.remove("disabled");
+                    quiz.style.pointerEvents = "auto";
+                    quiz.style.opacity = "1";
+
+                    return;
+                }                
+            });
+        });
+    }
+
+    document.querySelectorAll(".circle").forEach(circle => {
+        circle.addEventListener("click", () => {
+            let question = circle.dataset.question;
+            let value = circle.dataset.value;
+
+            // ✅ Remove previous selection for the same question
+            document.querySelectorAll(`.circle[data-question="${question}"]`).forEach(c => c.classList.remove("selected-strongly-disagree", "selected-disagree", "selected-neutral", "selected-agree", "selected-strongly-agree"));
+
+            // ✅ Add selected class based on value
+            circle.classList.add(`selected-${value}`);
+
+            // ✅ Save response persistently
+            saveResponse(question, value);
+        });
+    });
+
     loadPreviousSelection();
     enableNextQuestion();
+    enableSelected();
 });
+
 
 
     // ✅ Next Page Button Fix
