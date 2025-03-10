@@ -4,6 +4,7 @@ from sklearn.linear_model import LinearRegression
 from scipy.spatial.distance import cdist
 import os
 import re
+from joblib import load
 
 risk_free_rate_3m = 3/4  # Risk-free rate in percentage
 risk_free_rate_6m = 3/2
@@ -55,29 +56,39 @@ def get_boosted_score(stock):
     # Check stock sentiment
     stock_boost = stock_sentiment[
         (stock_sentiment['stock'] == stock) &
-        (stock_sentiment['recommendation_date'] == DATE) &
-        (stock_sentiment['period_months'] == PERIOD_MONTHS)
+        (stock_sentiment['recommendation_date'] == '2024-06-30') &
+        (stock_sentiment['period_months'] == int(PERIOD_MONTHS))
     ]
+    # print(stock_sentiment['recommendation_date'])
+
     if not stock_boost.empty:
         return stock_boost.iloc[0]['final_boost_score']
     
-    # If stock sentiment is not found, get sector from no_sentiment.csv
-    sector_info = no_sentiment[no_sentiment['stock'] == stock]
-    if sector_info.empty:
-        return 0  # If no sector information is found, return 0
+    sector_info = None
+    for key in stock_sector_map:
+        if stock in stock_sector_map[key]:
+            if key == 'Healthcare': key = "Health_Care"
+            sector_name = key.replace(" ","_")
+            break
 
-    sector_name = sector_info.iloc[0]['sector']
+    # If stock sentiment is not found, get sector from no_sentiment.csv
+    # sector_info = no_sentiment[no_sentiment['stock'] == stock]
+    # if sector_info.empty:
+    #     return 0  # If no sector information is found, return 0
+
+    # sector_name = sector_info.iloc[0]['sector']
 
     # Check sector sentiment
     sector_boost = sector_sentiment[
         (sector_sentiment['sector'] == sector_name) &
-        (sector_sentiment['recommendation_date'] == DATE) &
-        (sector_sentiment['period_months'] == PERIOD_MONTHS)
+        (sector_sentiment['recommendation_date'] == '2024-06-30 00:00:00+00:00') &
+        (sector_sentiment['period_months'] == int(PERIOD_MONTHS))
     ]
+    # print(sector_boost)
     if not sector_boost.empty:
         return sector_boost.iloc[0]['final_boost_score']
     
-def calculate_similarities(user_vector, stock_vectors):
+def calculate_similarities(user_vector): #, stock_vectors):
     """
     input
         user_vector (pd.Series)     : [1x9] vectors of the user to be compared
@@ -86,22 +97,32 @@ def calculate_similarities(user_vector, stock_vectors):
         raw_results (DataFrame)     : DataFrame of stock Data with calculated similarities
     """
     results = []
-    file_name = f"../data_storage/dated_features/{DATE_MONTH}m_back.csv"
+    file_name = f"data_storage/dated_features/{DATE_MONTH}m_back.csv"
     if not os.path.exists(file_name):
         print(f"File {file_name} not found..")
         return
 
-    stock_features = pd.read_csv(file_name, usecols=range(1, 15))
+    stock_features = pd.read_csv(file_name, usecols=range(1, 11))
+
+    # z score norm of user vector
+    for col in stock_features.columns:
+        if col!='stock':
+            user_vector.loc[0,col] = stock_features[col].quantile(user_vector.loc[0,col])
 
     # Euclidean distance
-    euclidean_distances = cdist(user_vector, stock_vectors, metric='euclidean')
+    euclidean_distances = cdist(user_vector, stock_features.drop(columns=['stock']), metric='euclidean')
 
     # Convert distances to similarity scores (inverted: smaller distance = higher similarity)
     similarity_scores = 1 / (1 + euclidean_distances) 
 
     raw_results = stock_features.copy()
-    raw_results['similarity'] = similarity_scores
+    raw_results['similarity'] = similarity_scores[0]
 
+    print("sim score: ",raw_results['similarity'])
+    
+    for stock in raw_results['stock']:
+        print(get_boosted_score(stock))
+        print('\n')
     # Apply sentiment boosting
     raw_results['boosted_similarity'] = raw_results.apply(
         lambda row: row['similarity'] + get_boosted_score(

@@ -1,6 +1,9 @@
 from flask import Flask, jsonify, request, render_template
+from flask_cors import CORS
 
+from utils import *
 app = Flask(__name__)
+CORS(app)
 
 # Sample data
 data = {"message": "Hello, World!"}
@@ -28,6 +31,43 @@ def post_data():
         return jsonify({"error": "Invalid data"}), 400
     data["message"] = new_data["message"]
     return jsonify(data), 201
+
+@app.route('/submit-data',methods=['POST'])
+def submit_data():
+    data = request.get_json()
+    print(data)
+    features = {
+        'avg_volume': [float(data['avg_volume'])],
+        'volatility': [float(data['volatility'])],
+        'pc_change': [float(data['pc_change'])],
+        'trend_consistency': [float(data['trend_consistency'])],
+        'avg_close': [float(data['avg_price'])],
+        'avg_open': [float(data['avg_price'])],
+        'avg_high': [float(data['avg_price'])],
+        'avg_low': [float(data['avg_price'])],
+        'momentum': [float(data['price_momentum'])]
+    }
+    sectors = [
+        "Basic Materials",
+        "Consumer Discretionary",
+        "Consumer Staples",
+        "Energy",
+        "Finance",
+        "Healthcare",
+        "Industrials",
+        "Real Estate",
+        "Technology",
+        "Telecommunications",
+        "Utilities"
+    ]
+
+    chosen_sectors = [sector for sector in sectors if data[sector]==1]
+    user_vectors_df = pd.DataFrame(features)
+    sim_result = calculate_similarities(user_vectors_df)
+    filtered_result = filter_stocks_by_sector(sim_result,chosen_sectors)
+    n_results = get_N_stocks(filtered_result,10).to_json()
+
+    return jsonify({"status": "success", "message": n_results})
 
 
 if __name__ == '__main__':

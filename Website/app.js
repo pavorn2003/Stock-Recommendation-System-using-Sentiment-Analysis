@@ -302,11 +302,36 @@ console.log("Final Feature Scores with Sectors BEFORE Submit:", finalOutput); //
 window.addEventListener("DOMContentLoaded", () => {
     const submitBtn = document.querySelector("#submit-btn");
 
+    // if (submitBtn) {
+    //     submitBtn.addEventListener("click", () => {
+    //         const finalOutput = JSON.parse(localStorage.getItem("finalFeatureScoresWithSectors"));
+    //         console.log("✅ Submit clicked, Final Feature Scores:", finalOutput);
+    //         window.location.href = "/Website/output.html";
+    //     });
+    // }
     if (submitBtn) {
-        submitBtn.addEventListener("click", () => {
+        submitBtn.addEventListener("click", async () => {
             const finalOutput = JSON.parse(localStorage.getItem("finalFeatureScoresWithSectors"));
             console.log("✅ Submit clicked, Final Feature Scores:", finalOutput);
-            window.location.href = "/Website/output.html";
+
+            try {
+                const response = await fetch("http://127.0.0.1:5000/submit-data", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(finalOutput)
+                });
+
+                const result = await response.json();
+                console.log("✅ API Response:", result);
+
+                // 👉 Redirect after successful POST
+                window.location.href = "/Website/output.html";
+            } catch (error) {
+                console.error("❌ Error submitting data:", error);
+                alert("Failed to submit. Please try again.");
+            }
         });
     }
 });
