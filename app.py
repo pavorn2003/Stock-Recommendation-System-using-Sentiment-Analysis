@@ -35,7 +35,6 @@ def post_data():
 @app.route('/submit-data',methods=['POST'])
 def submit_data():
     data = request.get_json()
-    print(data)
     features = {
         'avg_volume': [float(data['avg_volume'])],
         'volatility': [float(data['volatility'])],
@@ -64,10 +63,10 @@ def submit_data():
     chosen_sectors = [sector for sector in sectors if data[sector]==1]
     user_vectors_df = pd.DataFrame(features)
     sim_result = calculate_similarities(user_vectors_df)
-    filtered_result = filter_stocks_by_sector(sim_result,chosen_sectors)
-    n_results = get_N_stocks(filtered_result,10).to_json()
+    filtered_result = filter_stocks_by_sector(sim_result,chosen_sectors).reset_index()
+    n_results = get_N_stocks(filtered_result,10).reset_index().to_json()
 
-    return jsonify({"status": "success", "message": n_results})
+    return jsonify({"status": "success", "stock": n_results})
 
 
 if __name__ == '__main__':

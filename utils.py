@@ -84,7 +84,6 @@ def get_boosted_score(stock):
         (sector_sentiment['recommendation_date'] == '2024-06-30 00:00:00+00:00') &
         (sector_sentiment['period_months'] == int(PERIOD_MONTHS))
     ]
-    # print(sector_boost)
     if not sector_boost.empty:
         return sector_boost.iloc[0]['final_boost_score']
     
@@ -117,12 +116,7 @@ def calculate_similarities(user_vector): #, stock_vectors):
 
     raw_results = stock_features.copy()
     raw_results['similarity'] = similarity_scores[0]
-
-    print("sim score: ",raw_results['similarity'])
     
-    for stock in raw_results['stock']:
-        print(get_boosted_score(stock))
-        print('\n')
     # Apply sentiment boosting
     raw_results['boosted_similarity'] = raw_results.apply(
         lambda row: row['similarity'] + get_boosted_score(

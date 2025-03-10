@@ -302,17 +302,10 @@ console.log("Final Feature Scores with Sectors BEFORE Submit:", finalOutput); //
 window.addEventListener("DOMContentLoaded", () => {
     const submitBtn = document.querySelector("#submit-btn");
 
-    // if (submitBtn) {
-    //     submitBtn.addEventListener("click", () => {
-    //         const finalOutput = JSON.parse(localStorage.getItem("finalFeatureScoresWithSectors"));
-    //         console.log("✅ Submit clicked, Final Feature Scores:", finalOutput);
-    //         window.location.href = "/Website/output.html";
-    //     });
-    // }
     if (submitBtn) {
         submitBtn.addEventListener("click", async () => {
             const finalOutput = JSON.parse(localStorage.getItem("finalFeatureScoresWithSectors"));
-            console.log("✅ Submit clicked, Final Feature Scores:", finalOutput);
+            console.log("Submit clicked, Final Feature Scores:", finalOutput);
 
             try {
                 const response = await fetch("http://127.0.0.1:5000/submit-data", {
@@ -323,13 +316,18 @@ window.addEventListener("DOMContentLoaded", () => {
                     body: JSON.stringify(finalOutput)
                 });
 
-                const result = await response.json();
-                console.log("✅ API Response:", result);
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
 
-                // 👉 Redirect after successful POST
+                const result = await response.json();
+                console.log("API Response:", result);
+
+                localStorage.setItem("apiResultData", JSON.stringify(result.data));
+
                 window.location.href = "/Website/output.html";
             } catch (error) {
-                console.error("❌ Error submitting data:", error);
+                console.error("Error submitting data:", error);
                 alert("Failed to submit. Please try again.");
             }
         });
