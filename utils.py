@@ -134,6 +134,11 @@ def filter_stocks_by_sector(stock_data, chosen_sectors):
         output
             filtered_stock_data (pd.DataFrame)  : dataframe of filtered stock data input
     """
+    for i,stock in enumerate(chosen_sectors):
+        if stock == 'Healthcare': chosen_sectors[i] = "Health_Care"
+        elif stock == 'Real Estate': continue
+        else:chosen_sectors[i] = chosen_sectors[i].replace(" ","_")
+
     stock_to_sector = {stock: sector for sector, stocks in stock_sector_map.items() for stock in stocks}
     
     stocks = []

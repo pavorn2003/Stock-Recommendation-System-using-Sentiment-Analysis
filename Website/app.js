@@ -336,43 +336,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const submitBtn = document.querySelector(".submit-btn");
 
-    if (submitBtn) {
-        submitBtn.addEventListener("click", function () {
-            console.log("✅ Submit button was clicked!");
-        });
-    } else {
-        console.error("❌ Error: Submit button not found.");
-    }
-    if (submitBtn) {
-        submitBtn.addEventListener("click", () => {
-            // ✅ Retrieve quiz feature scores
-            const quizFeatureScores = JSON.parse(localStorage.getItem("quizFinalScores")) || {};
+    // Pachara guys new submit
+    // if (submitBtn) {
+    //     submitBtn.addEventListener("click", () => {
+    //         // ✅ Retrieve quiz feature scores
+    //         const quizFeatureScores = JSON.parse(localStorage.getItem("quizFinalScores")) || {};
     
-            // ✅ Retrieve sector selections
-            const sectorSelection = JSON.parse(localStorage.getItem("sectorSelection")) || {};
+    //         // ✅ Retrieve sector selections
+    //         const sectorSelection = JSON.parse(localStorage.getItem("sectorSelection")) || {};
     
-            // ✅ Retrieve selected time period & number of recommendations
-            const selectedTime = localStorage.getItem("time") || "6 months";
-            const numRecommendations = localStorage.getItem("recommendations") || "10";
+    //         // ✅ Retrieve selected time period & number of recommendations
+    //         const selectedTime = localStorage.getItem("time") || "6 months";
+    //         const numRecommendations = localStorage.getItem("recommendations") || "10";
     
-            // ✅ Merge all data into a single object
-            const finalData = {
-                ...quizFeatureScores,  // Quiz feature scores
-                ...sectorSelection,    // Sector selections (binary 0 or 1)
-                selectedTimePeriod: selectedTime,  // Time period selected
-                numberOfRecommendations: numRecommendations // Number of recommendations
-            };
+    //         // ✅ Merge all data into a single object
+    //         const finalData = {
+    //             ...quizFeatureScores,  // Quiz feature scores
+    //             ...sectorSelection,    // Sector selections (binary 0 or 1)
+    //             selectedTimePeriod: selectedTime,  // Time period selected
+    //             numberOfRecommendations: numRecommendations // Number of recommendations
+    //         };
     
-            // ✅ Save clean final data to localStorage
-            localStorage.setItem("finalFeatureScores", JSON.stringify(finalData));
+    //         // ✅ Save clean final data to localStorage
+    //         localStorage.setItem("finalFeatureScores", JSON.stringify(finalData));
     
-            // ✅ Debugging: Verify the final structured output
-            console.log("Final Feature Scores After Submission:", finalData);
+    //         // ✅ Debugging: Verify the final structured output
+    //         console.log("Final Feature Scores After Submission:", finalData);
     
-            // ✅ Redirect to results page
-            window.location.href = "/Website/output.html";
-        });
-    }
+    //         // ✅ Redirect to results page
+    //         window.location.href = "/Website/output.html";
+    //     });
+    // }
     
 
 
@@ -383,9 +377,10 @@ const featureScores = JSON.parse(localStorage.getItem("quizFinalScores")) || {};
 
 // ✅ Retrieve sector selections
 const sectorSelections = JSON.parse(localStorage.getItem("sectorSelection")) || {};
-
+const selectedTime = localStorage.getItem("time") || "6 months";
+const numRecommendations = localStorage.getItem("recommendations") || "10";
 // ✅ Merge sector selections into feature scores
-const finalOutput = { ...featureScores, ...sectorSelections };
+const finalOutput = { ...featureScores, ...sectorSelections, selectedTimePeriod: selectedTime, numberOfRecommendations: numRecommendations };
 
 // ✅ Save the merged output back to localStorage (so it's available immediately after submit)
 localStorage.setItem("finalFeatureScoresWithSectors", JSON.stringify(finalOutput));
