@@ -291,7 +291,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Compute & Log Final Scores
     const finalScores = computeAverages();
-    console.log("Final Feature Scores:", finalScores);
 
     // Save the final scores to localStorage for further use
     localStorage.setItem("quizFinalScores", JSON.stringify(finalScores));
@@ -305,6 +304,78 @@ document.addEventListener("DOMContentLoaded", function () {
             outputContainer.innerHTML += `<p><strong>${feature}:</strong> ${score}</p>`;
         });
     }
+
+    // ✅ Only run this on sectors.html
+    if (window.location.pathname.includes("sectors.html")) {
+        const recommendationSelect = document.getElementById("recommendations");
+
+        if (recommendationSelect) {
+            // ✅ Clear any existing options (fix in case of reloading issue)
+            recommendationSelect.innerHTML = "";
+
+            // ✅ Populate dropdown with numbers 1-10
+            for (let i = 1; i <= 10; i++) {
+                let option = document.createElement("option");
+                option.value = i;
+                option.textContent = i;
+                recommendationSelect.appendChild(option);
+            }
+
+            // ✅ Load saved recommendation count
+            const savedRecommendations = localStorage.getItem("recommendations");
+            if (savedRecommendations) {
+                recommendationSelect.value = savedRecommendations;
+            }
+
+            // ✅ Save recommendation count to localStorage on change
+            recommendationSelect.addEventListener("change", function () {
+                localStorage.setItem("recommendations", this.value);
+            });
+        }
+    }
+
+    const submitBtn = document.querySelector(".submit-btn");
+
+    if (submitBtn) {
+        submitBtn.addEventListener("click", function () {
+            console.log("✅ Submit button was clicked!");
+        });
+    } else {
+        console.error("❌ Error: Submit button not found.");
+    }
+    if (submitBtn) {
+        submitBtn.addEventListener("click", () => {
+            // ✅ Retrieve quiz feature scores
+            const quizFeatureScores = JSON.parse(localStorage.getItem("quizFinalScores")) || {};
+    
+            // ✅ Retrieve sector selections
+            const sectorSelection = JSON.parse(localStorage.getItem("sectorSelection")) || {};
+    
+            // ✅ Retrieve selected time period & number of recommendations
+            const selectedTime = localStorage.getItem("time") || "6 months";
+            const numRecommendations = localStorage.getItem("recommendations") || "10";
+    
+            // ✅ Merge all data into a single object
+            const finalData = {
+                ...quizFeatureScores,  // Quiz feature scores
+                ...sectorSelection,    // Sector selections (binary 0 or 1)
+                selectedTimePeriod: selectedTime,  // Time period selected
+                numberOfRecommendations: numRecommendations // Number of recommendations
+            };
+    
+            // ✅ Save clean final data to localStorage
+            localStorage.setItem("finalFeatureScores", JSON.stringify(finalData));
+    
+            // ✅ Debugging: Verify the final structured output
+            console.log("Final Feature Scores After Submission:", finalData);
+    
+            // ✅ Redirect to results page
+            window.location.href = "/Website/output.html";
+        });
+    }
+    
+
+
 });
 
 // ✅ Retrieve feature scores
@@ -356,4 +427,33 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+
+
+const options = document.querySelectorAll(".time-option");
+
+const timeOptions = document.querySelectorAll(".time-option");
+        const recommendationSelect = document.getElementById("recommendations");
+
+        // Load saved time from localStorage
+        const savedTime = localStorage.getItem("time");
+        if (savedTime) {
+            timeOptions.forEach(option => {
+                if (option.getAttribute("data-time") === savedTime) {
+                    option.classList.add("selected");
+                }
+            });
+        }
+
+        timeOptions.forEach(option => {
+            option.addEventListener("click", function() {
+                // Remove selected class from all
+                timeOptions.forEach(opt => opt.classList.remove("selected"));
+
+                // Add selected class to clicked
+                this.classList.add("selected");
+
+                // Save selection to localStorage
+                localStorage.setItem("time", this.getAttribute("data-time"));
+            });
+        });
 
