@@ -174,10 +174,10 @@ def group_stocks_by_sector(stock_data):
     
     return stock_data.groupby("sector").apply(lambda x:x)
 
-def calculate_stock_performance(stock_data,stock,holding_period):
+def calculate_stock_performance(stock,holding_period):
     """
         input
-            stock_data (pd.DataFrame)   : stock data of 
+            removed : stock_data (pd.DataFrame)   : stock data of 
             stock (str)                 : ticker of the stock to be evaluated
             holding_period (int)        : period of holding
         return

@@ -64,9 +64,9 @@ def submit_data():
     user_vectors_df = pd.DataFrame(features)
     sim_result = calculate_similarities(user_vectors_df)
     filtered_result = filter_stocks_by_sector(sim_result,chosen_sectors).reset_index()
-    n_results = get_N_stocks(filtered_result,10).reset_index().to_json()
-
-    return jsonify({"status": "success", "stock": n_results})
+    n_results = get_N_stocks(filtered_result,int(data['numberOfRecommendations'])).reset_index().to_json()
+    eval = calculate_stock_performance(stock=n_results['stock'],holding_period=int(data['selectedTimePeriod']))
+    return jsonify({"status": "success", "stock": n_results, "eval":eval})
 
 
 if __name__ == '__main__':
