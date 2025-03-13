@@ -314,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function () {
             recommendationSelect.innerHTML = "";
 
             // ✅ Populate dropdown with numbers 1-10
-            for (let i = 1; i <= 10; i++) {
+            for (let i = 1; i <= 20; i++) {
                 let option = document.createElement("option");
                 option.value = i;
                 option.textContent = i;
