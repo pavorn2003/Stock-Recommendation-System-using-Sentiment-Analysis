@@ -176,8 +176,17 @@ def group_stocks_by_sector(stock_data):
         output
             grouped_stock_data (pd.DataFrame)   : dataframe of filtered stock data, grouped by sector
     """
-    
-    return stock_data.groupby("sector").apply(lambda x:x)
+    sectors = {}
+    stock_to_sector = {stock: sector for sector, stocks in stock_sector_map.items() for stock in stocks}
+    for stock in stock_data:
+        for key in stock_sector_map.keys():
+            if stock in stock_sector_map[key]:
+                if key in sectors.keys():
+                    sectors[key].append(stock)
+                else:
+                    sectors[key] = [stock]
+                break
+    return sectors
 
 def calculate_stock_performance(stock,holding_period):
     """
@@ -197,95 +206,27 @@ def calculate_stock_performance(stock,holding_period):
 
     stock_features = pd.read_csv(file_name, usecols=range(1, 15))
 
-    stock_returns = []
-    for s in stock:
+    stock_returns = {}
+    for sector in stock.keys():
+        for s in stock[sector]:
 
-        stock_data = stock_features[stock_features['stock']==s]
-        close = float(stock_data['close_extract'])
-        print(close)
-        if holding_period == 12:
-            eval = float(stock_data[f'eval_1y'])
-        else:
-            eval = float(stock_data[f'eval_{holding_period}m'])
-        print(stock_data)
-        print(eval)
-        stock_return = ((eval-close)/close) * 100
+            df = pd.read_csv(f"data_storage/stock_price_data/{sector}/{s}.csv")
+            df['Date'] = pd.to_datetime(df['Date'])
+            df = df.sort_values(by="Date").reset_index()
+            date = pd.to_datetime(DATE)
+            while len(df[df['Date'] == date]) == 0:
+                date += pd.DateOffset(days=1)
+            eval = df[df['Date']==pd.to_datetime(date)-pd.DateOffset(days=30)]["Close/Last"].iloc[0].replace("$","")
+            eval = float(eval)
 
-        stock_returns.append(stock_return)
+            stock_data = stock_features[stock_features['stock']==s]
+            close = float(stock_data['close_extract'])
+            
+            stock_return = ((close-eval)/eval) * 100
+
+            stock_returns[s] = stock_return
     
     return stock_returns
     
 def get_return_prediction(stocks):
-    preds = []
-    for stock in stocks:
-        df = None
-        for dir in os.listdir("data_storage/stock_price_data"):
-            if stock+".csv" in os.listdir("data_storage/stock_price_data/"+dir):
-                df = pd.read_csv(f'data_storage/stock_price_data/{dir}/{stock}.csv')
-                break
-        if df.empty:
-            print("STOCKFILE NOT FOUND")
-            continue
-            raise Exception("FILE NOT FOUND")
-        features = ['Open', 'Low', 'Volume']
-
-        df['Date'] = pd.to_datetime(df['Date'])
-        df = df.sort_values(by="Date").reset_index()
-        date = pd.to_datetime(DATE)
-        while len(df[df['Date'] == date]) == 0:
-            date += pd.DateOffset(days=1)
-        index = df[df['Date']==pd.to_datetime(date)].index[0]
-        output_date = date + pd.DateOffset(days=30)
-        while len(df[df['Date'] == output_date]) == 0:
-            output_date += pd.DateOffset(days=1)
-        output_index = df[df['Date']==output_date].index[0]
-
-        num_data = df[features].to_numpy().astype(str)
-        num_data = np.char.replace(num_data, '$', '')
-
-        output_var = df[['Close/Last']].to_numpy().astype(str)
-        output_var = np.char.replace(output_var, '$', '')
-        output_var = output_var.astype(float)
-
-
-        scaler = MinMaxScaler()
-        feature_transform = scaler.fit_transform(num_data)
-        feature_transform= pd.DataFrame(columns=features, data=feature_transform, index=df.index)
-
-        X_train, X_test = feature_transform[:index], feature_transform[index:]
-        offset = len(output_var[:output_index]) - len(output_var[:index])
-        y_train = output_var[offset:output_index]
-
-        trainX =np.array(X_train)
-        testX =np.array(X_test)
-        X_train = trainX.reshape(X_train.shape[0], 1, X_train.shape[1])
-        X_test = testX.reshape(X_test.shape[0], 1, X_test.shape[1])
-
-        early_stop = EarlyStopping(
-            monitor='loss',   # Monitor validation loss
-            patience=5,           # Stop after 3 epochs with no improvement
-            restore_best_weights=True  # Roll back to best model
-        )
-
-        lstm = Sequential()
-        lstm.add(LSTM(32, input_shape=(1, trainX.shape[1]), activation='relu', return_sequences=False))
-        lstm.add(Dense(1))
-        lstm.compile(loss='mean_squared_error', optimizer='adam')
-        history=lstm.fit(X_train, y_train, epochs=30, batch_size=8, verbose=1, shuffle=False, callbacks=[early_stop])
-
-        date += pd.DateOffset(days=1)
-        while len(df[df['Date'] == date]) == 0:
-            date += pd.DateOffset(days=1)
-        outp_feature = df[df['Date'] == date][features].to_numpy().astype(str)
-        outp_feature = np.char.replace(outp_feature, '$', '')
-
-        outp_feature = scaler.transform(outp_feature)
-
-        X =np.array(outp_feature)
-        outp_feature = X.reshape(outp_feature.shape[0], 1, outp_feature.shape[1])
-        print("output features: ",outp_feature)
-        # outp_feature.astype(float)
-        pred = lstm.predict(outp_feature)
-
-        preds.append(pred)
-    return preds
+    return

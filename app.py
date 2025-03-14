@@ -65,12 +65,12 @@ def submit_data():
     sim_result = calculate_similarities(user_vectors_df)
     filtered_result = filter_stocks_by_sector(sim_result,chosen_sectors).reset_index()
     n_results = get_N_stocks(filtered_result,int(data['numberOfRecommendations'])).reset_index()
-    print("stocks: ",n_results['stock'])
-    eval = calculate_stock_performance(stock=n_results['stock'].to_list(),holding_period=int(data['selectedTimePeriod']))
-    preds = get_return_prediction(n_results['stock'].to_list())
-    print("preds: ",preds)
-    
-    return jsonify({"status": "success", "stock": n_results['stock'].to_list(), "eval": eval}) #"preds": preds})
+    grouped_stocks = group_stocks_by_sector(n_results['stock'].to_list())
+    print("stocks: ",grouped_stocks)
+    performance = calculate_stock_performance(stock=grouped_stocks,holding_period=int(data['selectedTimePeriod']))
+    print(performance)
+
+    return jsonify({"status": "success", "stock": grouped_stocks, "performance": performance}) #"preds": preds})
 
 
 if __name__ == '__main__':
