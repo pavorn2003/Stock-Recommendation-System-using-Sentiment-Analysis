@@ -377,10 +377,11 @@ const featureScores = JSON.parse(localStorage.getItem("quizFinalScores")) || {};
 
 // ✅ Retrieve sector selections
 const sectorSelections = JSON.parse(localStorage.getItem("sectorSelection")) || {};
-const selectedTime = localStorage.getItem("time") || "6 months";
+const selectedTime = localStorage.getItem("time") || "6";
 const numRecommendations = localStorage.getItem("recommendations") || "10";
 // ✅ Merge sector selections into feature scores
 const finalOutput = { ...featureScores, ...sectorSelections, selectedTimePeriod: selectedTime, numberOfRecommendations: numRecommendations };
+
 
 // ✅ Save the merged output back to localStorage (so it's available immediately after submit)
 localStorage.setItem("finalFeatureScoresWithSectors", JSON.stringify(finalOutput));

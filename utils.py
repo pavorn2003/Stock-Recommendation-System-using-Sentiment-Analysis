@@ -1,10 +1,15 @@
 import pandas as pd
 import numpy as np
-from sklearn.linear_model import LinearRegression
 from scipy.spatial.distance import cdist
 import os
 import re
 from joblib import load
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.callbacks import EarlyStopping
+from keras.layers import LSTM
+from keras.utils import plot_model
+from sklearn.preprocessing import MinMaxScaler
 
 risk_free_rate_3m = 3/4  # Risk-free rate in percentage
 risk_free_rate_6m = 3/2
@@ -15,8 +20,8 @@ risk_free_rate_12m = 3
 #          '03-31-2024', '06-30-2024']
 # months_back = [3, 6, 12]
 
-DATE_MONTH = "06-30-2024_12"
-DATE = "06-30-2024"
+DATE_MONTH = "06-30-2023_12"
+DATE = "06-30-2023"
 PERIOD_MONTHS = "12"
 # Sentiment files
 stock_sentiment = pd.read_csv("data_storage/sentiment_scores/stock_sentiment_final.csv")
@@ -56,7 +61,7 @@ def get_boosted_score(stock):
     # Check stock sentiment
     stock_boost = stock_sentiment[
         (stock_sentiment['stock'] == stock) &
-        (stock_sentiment['recommendation_date'] == '2024-06-30') &
+        (stock_sentiment['recommendation_date'] == '2023-06-30') &
         (stock_sentiment['period_months'] == int(PERIOD_MONTHS))
     ]
     # print(stock_sentiment['recommendation_date'])
@@ -81,7 +86,7 @@ def get_boosted_score(stock):
     # Check sector sentiment
     sector_boost = sector_sentiment[
         (sector_sentiment['sector'] == sector_name) &
-        (sector_sentiment['recommendation_date'] == '2024-06-30 00:00:00+00:00') &
+        (sector_sentiment['recommendation_date'] == '2023-06-30 00:00:00+00:00') &
         (sector_sentiment['period_months'] == int(PERIOD_MONTHS))
     ]
     if not sector_boost.empty:
@@ -185,18 +190,102 @@ def calculate_stock_performance(stock,holding_period):
             Note: I'm not sure if sharpe ratio, stdev, and average could be calculated
     """
 
-    file_name = f"../data_storage/stock_data/{DATE_MONTH}m_back.csv"
+    file_name = f"data_storage/stock_data/{DATE_MONTH}m_back.csv"
     if not os.path.exists(file_name):
         print(f"File {file_name} not found..")
         return
 
     stock_features = pd.read_csv(file_name, usecols=range(1, 15))
 
-    stock_data = stock_features[stock_features['stock']==stock]
-    close = stock_data['close_extract']
-    eval = stock_data[f'eval_{holding_period}m']
+    stock_returns = []
+    for s in stock:
 
-    stock_return = ((eval-close) * 100)
+        stock_data = stock_features[stock_features['stock']==s]
+        close = float(stock_data['close_extract'])
+        print(close)
+        if holding_period == 12:
+            eval = float(stock_data[f'eval_1y'])
+        else:
+            eval = float(stock_data[f'eval_{holding_period}m'])
+        print(stock_data)
+        print(eval)
+        stock_return = ((eval-close)/close) * 100
+
+        stock_returns.append(stock_return)
     
-    return stock_return
+    return stock_returns
     
+def get_return_prediction(stocks):
+    preds = []
+    for stock in stocks:
+        df = None
+        for dir in os.listdir("data_storage/stock_price_data"):
+            if stock+".csv" in os.listdir("data_storage/stock_price_data/"+dir):
+                df = pd.read_csv(f'data_storage/stock_price_data/{dir}/{stock}.csv')
+                break
+        if df.empty:
+            print("STOCKFILE NOT FOUND")
+            continue
+            raise Exception("FILE NOT FOUND")
+        features = ['Open', 'Low', 'Volume']
+
+        df['Date'] = pd.to_datetime(df['Date'])
+        df = df.sort_values(by="Date").reset_index()
+        date = pd.to_datetime(DATE)
+        while len(df[df['Date'] == date]) == 0:
+            date += pd.DateOffset(days=1)
+        index = df[df['Date']==pd.to_datetime(date)].index[0]
+        output_date = date + pd.DateOffset(days=30)
+        while len(df[df['Date'] == output_date]) == 0:
+            output_date += pd.DateOffset(days=1)
+        output_index = df[df['Date']==output_date].index[0]
+
+        num_data = df[features].to_numpy().astype(str)
+        num_data = np.char.replace(num_data, '$', '')
+
+        output_var = df[['Close/Last']].to_numpy().astype(str)
+        output_var = np.char.replace(output_var, '$', '')
+        output_var = output_var.astype(float)
+
+
+        scaler = MinMaxScaler()
+        feature_transform = scaler.fit_transform(num_data)
+        feature_transform= pd.DataFrame(columns=features, data=feature_transform, index=df.index)
+
+        X_train, X_test = feature_transform[:index], feature_transform[index:]
+        offset = len(output_var[:output_index]) - len(output_var[:index])
+        y_train = output_var[offset:output_index]
+
+        trainX =np.array(X_train)
+        testX =np.array(X_test)
+        X_train = trainX.reshape(X_train.shape[0], 1, X_train.shape[1])
+        X_test = testX.reshape(X_test.shape[0], 1, X_test.shape[1])
+
+        early_stop = EarlyStopping(
+            monitor='loss',   # Monitor validation loss
+            patience=5,           # Stop after 3 epochs with no improvement
+            restore_best_weights=True  # Roll back to best model
+        )
+
+        lstm = Sequential()
+        lstm.add(LSTM(32, input_shape=(1, trainX.shape[1]), activation='relu', return_sequences=False))
+        lstm.add(Dense(1))
+        lstm.compile(loss='mean_squared_error', optimizer='adam')
+        history=lstm.fit(X_train, y_train, epochs=30, batch_size=8, verbose=1, shuffle=False, callbacks=[early_stop])
+
+        date += pd.DateOffset(days=1)
+        while len(df[df['Date'] == date]) == 0:
+            date += pd.DateOffset(days=1)
+        outp_feature = df[df['Date'] == date][features].to_numpy().astype(str)
+        outp_feature = np.char.replace(outp_feature, '$', '')
+
+        outp_feature = scaler.transform(outp_feature)
+
+        X =np.array(outp_feature)
+        outp_feature = X.reshape(outp_feature.shape[0], 1, outp_feature.shape[1])
+        print("output features: ",outp_feature)
+        # outp_feature.astype(float)
+        pred = lstm.predict(outp_feature)
+
+        preds.append(pred)
+    return preds
