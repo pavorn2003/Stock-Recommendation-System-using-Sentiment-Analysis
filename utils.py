@@ -16,12 +16,12 @@ risk_free_rate_6m = 3/2
 risk_free_rate_12m = 3
 
 # dates = ['03-31-2022', '06-30-2022', '09-30-2022', '12-31-2022',
-#          '03-31-2023', '06-30-2023', '09-30-2023', '12-31-2023',
+#          '03-31-2024', '06-30-2024', '09-30-2024', '12-31-2024',
 #          '03-31-2024', '06-30-2024']
 # months_back = [3, 6, 12]
 
-DATE_MONTH = "06-30-2023_12"
-DATE = "06-30-2023"
+DATE_MONTH = "06-30-2024_12"
+DATE = "06-30-2024"
 PERIOD_MONTHS = "12"
 # Sentiment files
 stock_sentiment = pd.read_csv("data_storage/sentiment_scores/stock_sentiment_final.csv")
@@ -61,7 +61,7 @@ def get_boosted_score(stock):
     # Check stock sentiment
     stock_boost = stock_sentiment[
         (stock_sentiment['stock'] == stock) &
-        (stock_sentiment['recommendation_date'] == '2023-06-30') &
+        (stock_sentiment['recommendation_date'] == '2024-06-30') &
         (stock_sentiment['period_months'] == int(PERIOD_MONTHS))
     ]
     # print(stock_sentiment['recommendation_date'])
@@ -86,7 +86,7 @@ def get_boosted_score(stock):
     # Check sector sentiment
     sector_boost = sector_sentiment[
         (sector_sentiment['sector'] == sector_name) &
-        (sector_sentiment['recommendation_date'] == '2023-06-30 00:00:00+00:00') &
+        (sector_sentiment['recommendation_date'] == '2024-06-30 00:00:00+00:00') &
         (sector_sentiment['period_months'] == int(PERIOD_MONTHS))
     ]
     if not sector_boost.empty:
@@ -140,7 +140,7 @@ def filter_stocks_by_sector(stock_data, chosen_sectors):
             filtered_stock_data (pd.DataFrame)  : dataframe of filtered stock data input
     """
     for i,stock in enumerate(chosen_sectors):
-        if stock == 'Healthcare': chosen_sectors[i] = "Health_Care"
+        if stock == 'Healthcare': chosen_sectors[i] = "Healthcare"
         elif stock == 'Real Estate': continue
         else:chosen_sectors[i] = chosen_sectors[i].replace(" ","_")
 
@@ -216,7 +216,10 @@ def calculate_stock_performance(stock,holding_period):
             date = pd.to_datetime(DATE)
             while len(df[df['Date'] == date]) == 0:
                 date += pd.DateOffset(days=1)
-            eval = df[df['Date']==pd.to_datetime(date)-pd.DateOffset(days=30)]["Close/Last"].iloc[0].replace("$","")
+            eval_date = date-pd.DateOffset(days=30)
+            while len(df[df['Date'] == eval_date]) == 0:
+                eval_date += pd.DateOffset(days=1)
+            eval = df[df['Date']==eval_date]["Close/Last"].iloc[0].replace("$","")
             eval = float(eval)
 
             stock_data = stock_features[stock_features['stock']==s]
@@ -235,32 +238,34 @@ def get_articles(stocks):
         articles_return[sector] = []
         for stock in stocks[sector]:
             print(stock)
-            stock_articles = articles[(articles['stock'] == stock) & (articles['source'] == 'news')]
-            if stock_articles.shape[1] == 0:
-                stock_articles = articles[(articles['stock'] == stock) & (articles['source'] == 'youtube')]
-            print(stock_articles)
-            print("\n")
-
+            articles['date'] = pd.to_datetime(articles['date'].astype(str).str[:10], errors='coerce')
             date = pd.to_datetime(DATE)
+            stock_articles = articles[(articles['stock'] == stock) & (articles['source'] == 'news') & (articles['date'] <= date)]
 
-            articles['date'] = articles['date'].astype(str).str[:10]
-            articles['date'] = pd.to_datetime(articles['date'])
+            # If no news articles, try youtube
+            if stock_articles.empty:
+                stock_articles = articles[(articles['stock'] == stock) & (articles['source'] == 'youtube') & (articles['date'] <= date)]
 
-            count = 0
-            while len(stock_articles[stock_articles['date'] == date]) == 0:
-                date -= pd.DateOffset(days=1)
-                count+=10
-                if count==10: break
-            
-            if count != 10:
-                stock_articles = stock_articles[stock_articles['date'].date() == date.date()]
-            selected_article = stock_articles.iloc[0]
-            articles_return[sector].append({
-                'stock' : stock,
-                'article_title' : selected_article['source_title'][0],
-                'article_link' : selected_article['source_url'][0],
-                'summary' : selected_article['summarized_text'][0]
-            })
+            articles = articles.sort_values(by="date",ascending=False)
+
+            # Sample only if non-empty
+            if not stock_articles.empty:
+                selected_article = stock_articles.iloc[0]
+                articles_return[sector].append({
+                    'stock': stock,
+                    'article_title': selected_article['source_title'],
+                    'article_link': selected_article['source_url'],
+                    'date': selected_article['date'],
+                    'summary': selected_article['summarized_text']
+                })
+            else:
+                articles_return[sector].append({
+                    'stock': stock,
+                    'article_title': None,
+                    'article_link': None,
+                    'date': None,
+                    'summary': None
+                })
     return articles_return
 
 # def get_articles(stocks, reference_date=None):

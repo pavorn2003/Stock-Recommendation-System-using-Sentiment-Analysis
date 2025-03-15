@@ -71,7 +71,7 @@ def submit_data():
     articles = get_articles(grouped_stocks)
     print(articles)
 
-    return jsonify({"status": "success", "stock": articles, "performance": performance}) #"preds": preds})
+    return jsonify({"status": "success", "stock": grouped_stocks,"articles": articles, "performance": performance}) #"preds": preds})
 
 
 if __name__ == '__main__':
