@@ -68,9 +68,10 @@ def submit_data():
     grouped_stocks = group_stocks_by_sector(n_results['stock'].to_list())
     print("stocks: ",grouped_stocks)
     performance = calculate_stock_performance(stock=grouped_stocks,holding_period=int(data['selectedTimePeriod']))
-    print(performance)
+    articles = get_articles(grouped_stocks)
+    print(articles)
 
-    return jsonify({"status": "success", "stock": grouped_stocks, "performance": performance}) #"preds": preds})
+    return jsonify({"status": "success", "stock": articles, "performance": performance}) #"preds": preds})
 
 
 if __name__ == '__main__':

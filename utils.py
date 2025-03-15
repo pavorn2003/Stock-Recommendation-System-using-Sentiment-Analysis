@@ -228,5 +228,102 @@ def calculate_stock_performance(stock,holding_period):
     
     return stock_returns
     
-def get_return_prediction(stocks):
-    return
+def get_articles(stocks):
+    articles = pd.read_csv("data_storage/sentiment_scores/aggregate_sentiment_final.csv")
+    articles_return = {}
+    for sector in stocks.keys():
+        articles_return[sector] = []
+        for stock in stocks[sector]:
+            print(stock)
+            stock_articles = articles[(articles['stock'] == stock) & (articles['source'] == 'news')]
+            if stock_articles.shape[1] == 0:
+                stock_articles = articles[(articles['stock'] == stock) & (articles['source'] == 'youtube')]
+            print(stock_articles)
+            print("\n")
+
+            date = pd.to_datetime(DATE)
+
+            articles['date'] = articles['date'].astype(str).str[:10]
+            articles['date'] = pd.to_datetime(articles['date'])
+
+            count = 0
+            while len(stock_articles[stock_articles['date'] == date]) == 0:
+                date -= pd.DateOffset(days=1)
+                count+=10
+                if count==10: break
+            
+            if count != 10:
+                stock_articles = stock_articles[stock_articles['date'].date() == date.date()]
+            selected_article = stock_articles.iloc[0]
+            articles_return[sector].append({
+                'stock' : stock,
+                'article_title' : selected_article['source_title'][0],
+                'article_link' : selected_article['source_url'][0],
+                'summary' : selected_article['summarized_text'][0]
+            })
+    return articles_return
+
+# def get_articles(stocks, reference_date=None):
+#     # Load and clean article data
+#     articles = pd.read_csv("data_storage/sentiment_scores/aggregate_sentiment_final.csv")
+
+#     # Clean and normalize 'date' column once
+#     articles['date'] = articles['date'].astype(str)
+#     for i,art in enumerate(articles['date']):
+#         articles.loc[i,'date'] = articles['date'][i][:10]
+#         articles['date'] = pd.to_datetime(articles['date'])
+    
+#     articles_return = {}
+    
+#     # If no reference date provided, use today
+#     if reference_date is None:
+#         reference_date = pd.to_datetime(datetime.today()).normalize()
+#     else:
+#         reference_date = pd.to_datetime(reference_date)
+
+#     for sector in stocks:
+#         articles_return[sector] = []
+#         for stock in stocks[sector]:
+#             print(f"Processing stock: {stock}")
+
+#             # Filter by stock first
+#             stock_articles = articles[articles['stock'] == stock]
+
+#             # Filter by same year
+#             stock_articles_same_year = stock_articles[stock_articles['date'].dt.year == reference_date.year]
+
+#             # Try to get news articles first
+#             news_articles = stock_articles_same_year[stock_articles_same_year['source'] == 'news']
+
+#             if not news_articles.empty:
+#                 selected_article = news_articles.iloc[0]
+#             else:
+#                 # Fallback to youtube articles within same year
+#                 youtube_articles = stock_articles_same_year[stock_articles_same_year['source'] == 'youtube']
+#                 if not youtube_articles.empty:
+#                     selected_article = youtube_articles.iloc[0]
+#                 else:
+#                     # No article found even in fallback
+#                     selected_article = None
+
+#             # Prepare result
+#             if selected_article is not None:
+#                 articles_return[sector].append({
+#                     'stock': stock,
+#                     'article_title': selected_article['source_title'],
+#                     'article_link': selected_article['source_url'],
+#                     'summary': selected_article['summarized_text'],
+#                     'article_date': selected_article['date'].strftime('%Y-%m-%d'),
+#                     'source': selected_article['source']
+#                 })
+#             else:
+#                 articles_return[sector].append({
+#                     'stock': stock,
+#                     'article_title': None,
+#                     'article_link': None,
+#                     'summary': None,
+#                     'article_date': None,
+#                     'source': None
+#                 })
+
+#     return articles_return
