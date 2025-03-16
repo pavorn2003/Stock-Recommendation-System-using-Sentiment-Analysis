@@ -314,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function () {
             recommendationSelect.innerHTML = "";
 
             // ✅ Populate dropdown with numbers 1-10
-            for (let i = 1; i <= 20; i++) {
+            for (let i = 1; i <= 25; i++) {
                 let option = document.createElement("option");
                 option.value = i;
                 option.textContent = i;
@@ -334,7 +334,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    const submitBtn = document.querySelector(".submit-btn");
+    // const submitBtn = document.querySelector(".submit-btn");
 
     // Pachara guys new submit
     // if (submitBtn) {
@@ -422,7 +422,6 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-
 
 
 const options = document.querySelectorAll(".time-option");
