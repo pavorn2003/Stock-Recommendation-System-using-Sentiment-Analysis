@@ -256,7 +256,7 @@ def get_articles(stocks):
                     'article_title': selected_article['source_title'],
                     'article_link': selected_article['source_url'],
                     'date': selected_article['date'],
-                    'text': ""#selected_article['text']
+                    'text': selected_article['text']
                 })
             else:
                 articles_return[sector].append({
