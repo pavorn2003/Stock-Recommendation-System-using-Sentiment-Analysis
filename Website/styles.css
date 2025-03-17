@@ -1092,70 +1092,76 @@ h2 {
   border-radius: 5px;
 }
 
-
 /* Table Layout */
 .results_table {
-  display: flex;
-  justify-content: space-between; /* Distribute space evenly */
-  align-items: center; /* Ensure vertical centering */
-  width: 80%; /* Adjust width */
-  max-width: 900px; /* Maintain balance */
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Equal column widths */
+  align-items: start;
+  width: 80%;
+  max-width: 900px;
   margin: 0 auto;
   border: 2px solid #ddd;
   border-radius: 12px;
-  padding: 25px 40px; /* Reduced padding for balance */
+  padding: 25px 40px;
   background: #f9f9f9;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Column Styling */
-.column {
-  flex: 1;
-  text-align: left;
-  min-width: 250px; /* Adjusted minimum width */
-  white-space: nowrap;
-}
-
-/* Headers */
+/* Ensure Headers Stay Separate */
 .column h3 {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: bold;
-  margin-bottom: 5px; /* Reduce spacing */
-  display: inline-block;
+  margin-bottom: 10px;
   padding-bottom: 4px;
-  border-bottom: 3px solid #FB5C5C;
+  border-bottom: 3px solid #C46A6A;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: inline-block; /* Ensures underline is only as wide as text */
+  width: fit-content; /* Prevents merging */
 }
 
-/* List Styling */
+/* Ensure Stocks and Returns Align */
 .column ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: grid;
+  grid-auto-rows: minmax(40px, auto); /* Ensures equal row heights */
+  align-items: center; /* Vertically align content */
 }
 
-.column li {
-  font-size: 1.2rem;
+/* Stock Formatting */
+.column:first-child li {
+  font-size: 1.4rem;
   font-weight: bold;
-  padding: 6px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: #222;
+  font-family: 'Arial', sans-serif;
+  letter-spacing: 0.5px;
 }
 
-/* Fixes alignment so columns are evenly spaced */
-.results_table .column:nth-child(2) {
-  text-align: left;
+/* Returns Column */
+.column:nth-child(2) {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-
-
-/* Green Profit Values */
-.profits li {
-  color: green;
+/* Returns Font */
+.column:nth-child(2) li {
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-align: center;
 }
+
+/* Matte Color Returns */
+.green {
+  color: #4B8B5F;
+}
+
+.red {
+  color: #C46A6A;
+}
+
 
 /* News Section */
 .news_section {
@@ -1230,4 +1236,52 @@ h2 {
 .news_content a:hover {
   background: #953737;
 }
+
+#sectorHeatmap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.heatmap-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: height 0.3s ease-in-out;
+}
+
+.heatmap-title {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.sector-group rect {
+  stroke-width: 2;
+}
+
+.stock-node rect {
+  stroke-width: 1;
+}
+
+.stock-label, .stock-return {
+  font-family: "Arial", sans-serif;
+  fill: black;
+}
+
+.sector-label {
+  font-weight: bold;
+  fill: black;
+  text-transform: uppercase;
+  dominant-baseline: middle;
+  padding-top: 10px;  /* 🔥 Ensures space between sectors */
+}
+
+
 

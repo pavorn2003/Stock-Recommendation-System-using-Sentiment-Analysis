@@ -1,12 +1,12 @@
 // ✅ Page Navigation Functions (Now Globally Available)
 function nextPage1() {
-    window.location.href = "/Website/quiz2.html";
+    window.location.href = "/quiz2.html";
 }
 function nextPage2() {
-    window.location.href = "/Website/quiz3.html";
+    window.location.href = "/quiz3.html";
 }
 function nextPage3() {
-    window.location.href = "/Website/sectors.html";
+    window.location.href = "/sectors.html";
 }
 function goBack() {
     window.history.back();
@@ -336,43 +336,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
     }
-
-    // const submitBtn = document.querySelector(".submit-btn");
-
-    // Pachara guys new submit
-    // if (submitBtn) {
-    //     submitBtn.addEventListener("click", () => {
-    //         // ✅ Retrieve quiz feature scores
-    //         const quizFeatureScores = JSON.parse(localStorage.getItem("quizFinalScores")) || {};
-    
-    //         // ✅ Retrieve sector selections
-    //         const sectorSelection = JSON.parse(localStorage.getItem("sectorSelection")) || {};
-    
-    //         // ✅ Retrieve selected time period & number of recommendations
-    //         const selectedTime = localStorage.getItem("time") || "6 months";
-    //         const numRecommendations = localStorage.getItem("recommendations") || "10";
-    
-    //         // ✅ Merge all data into a single object
-    //         const finalData = {
-    //             ...quizFeatureScores,  // Quiz feature scores
-    //             ...sectorSelection,    // Sector selections (binary 0 or 1)
-    //             selectedTimePeriod: selectedTime,  // Time period selected
-    //             numberOfRecommendations: numRecommendations // Number of recommendations
-    //         };
-    
-    //         // ✅ Save clean final data to localStorage
-    //         localStorage.setItem("finalFeatureScores", JSON.stringify(finalData));
-    
-    //         // ✅ Debugging: Verify the final structured output
-    //         console.log("Final Feature Scores After Submission:", finalData);
-    
-    //         // ✅ Redirect to results page
-    //         window.location.href = "/Website/output.html";
-    //     });
-    // }
-    
-
-
 });
 
 const options = document.querySelectorAll(".time-option");
@@ -446,7 +409,7 @@ window.addEventListener("DOMContentLoaded", () => {
             console.log("Submit clicked, Final Feature Scores:", finalOutput);
         
             try {
-                const response = await fetch("http://127.0.0.1:5000/submit-data", {
+                const response = await fetch("http://stocky.ap-southeast-2.elasticbeanstalk.com/submit-data", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -463,7 +426,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 localStorage.setItem("apiResultData", JSON.stringify(result));
 
                 setTimeout(() => {
-                    window.location.href = "/Website/output.html";
+                    window.location.href = "/output.html";
                 }, 3000);
             } catch (error) {
                 console.error("Error submitting data:", error);
@@ -481,7 +444,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const stockList = document.getElementById("stockList");
     const profitList = document.getElementById("profitList");
     const newsContainer = document.getElementById("newsContainer");
-    
+    const plHeader = document.getElementById("plHeader");
+    const storedTimePeriod = localStorage.getItem("selectedTimePeriod") || "6"; 
+
+    // Update the header dynamically
+    plHeader.textContent = `Returns for the past ${storedTimePeriod} months`;
 
 
     // ✅ Check if it's null, undefined, or literally the string "undefined"
@@ -551,7 +518,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 : "No summary available.";
                 let articleImage = article.image_url && article.image_url.trim() !== "" 
                 ? article.image_url 
-                : "/Website/images/News_image.png"; 
+                : "/images/News_image.png"; 
 
                 newsCard.innerHTML = `
                     <div class="news_image">
@@ -573,3 +540,135 @@ document.addEventListener("DOMContentLoaded", function () {
         newsContainer.innerHTML = "<p>No news available.</p>";
     }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const storedData = JSON.parse(localStorage.getItem("apiResultData")) || {};
+    const performanceData = storedData.performance || {};
+    const stockData = storedData.stock || {};
+
+    console.log("📊 Performance Data:", performanceData);
+    console.log("🏢 Sector-wise Stocks:", stockData);
+
+    if (Object.keys(stockData).length > 0) {
+        renderHeatmap(stockData, performanceData);
+    }
+});
+
+function renderHeatmap(stockData, performanceData) {
+    const baseWidth = 900;
+    const baseHeight = 500;
+    const sectorCount = Object.keys(stockData).length;
+    const totalStocks = Object.values(stockData).flat().length;
+
+    // 🔥 Dynamically adjust height based on number of stocks & sectors
+    const dynamicHeight = Math.max(baseHeight, sectorCount * 100, totalStocks * 50);
+
+    const container = d3.select("#sectorHeatmap");
+    container.html("");
+
+    const card = container.append("div")
+        .attr("class", "heatmap-card")
+        .style("width", `${baseWidth + 40}px`)
+        .style("height", `${dynamicHeight + 100}px`);
+
+    card.append("h2")
+        .attr("class", "heatmap-title")
+        .text("Stock Performance by Sector");
+
+    const svg = card.append("svg")
+        .attr("width", baseWidth)
+        .attr("height", dynamicHeight);
+
+    const treemap = d3.treemap()
+        .size([baseWidth, dynamicHeight])
+        .paddingInner(20)
+        .paddingOuter(12)
+        .round(true);
+
+    const returns = Object.values(performanceData).filter(v => v !== undefined);
+    const minReturn = Math.min(...returns);
+    const maxReturn = Math.max(...returns);
+
+    const colorScale = d3.scaleLinear()
+        .domain([minReturn, 0, maxReturn])
+        .range(["#d73027", "#ffffff", "#1a9850"])
+        .interpolate(d3.interpolateRgb);
+
+    const sectorNodes = Object.entries(stockData)
+        .map(([sector, stocks]) => {
+            const filteredStocks = stocks.filter(stock => performanceData[stock] !== undefined);
+            if (filteredStocks.length === 0) return null;
+            return {
+                name: sector,
+                children: filteredStocks.map(stock => ({
+                    name: stock,
+                    value: Math.abs(performanceData[stock]) || 1,
+                    performance: performanceData[stock] || 0
+                }))
+            };
+        })
+        .filter(Boolean);
+
+    const root = d3.hierarchy({ children: sectorNodes })
+        .sum(d => d.children ? 0 : Math.max(d.value, 2));
+
+    treemap(root);
+
+    const sectorGroups = svg.selectAll(".sector-group")
+        .data(root.children)
+        .enter()
+        .append("g")
+        .attr("class", "sector-group")
+        .attr("transform", d => `translate(${d.x0},${d.y0 + 20})`);
+
+    sectorGroups.append("text")
+        .attr("x", d => (d.x1 - d.x0) / 2) // Centers dynamically
+        .attr("y", -15)  // Moves it slightly up
+        .text(d => d.data.name.toUpperCase())
+        .attr("class", "sector-label")
+        .style("text-anchor", "middle") // Ensures alignment
+        .style("font-size", d => Math.max(14, Math.min(24, (d.x1 - d.x0) / d.data.name.length)) + "px"); // Dynamic font-size
+    
+
+    sectorGroups.append("rect")
+        .attr("width", d => d.x1 - d.x0)
+        .attr("height", d => d.y1 - d.y0 - 10)
+        .attr("fill", "none")
+        .attr("stroke", "#333")
+        .attr("stroke-width", 2)
+        .attr("rx", 10);
+
+    const nodes = sectorGroups.selectAll(".stock-node")
+        .data(d => d.children)
+        .enter()
+        .append("g")
+        .attr("class", "stock-node")
+        .attr("transform", d => `translate(${d.x0 - d.parent.x0},${d.y0 - d.parent.y0})`);
+
+    nodes.append("rect")
+        .attr("width", d => d.x1 - d.x0)
+        .attr("height", d => d.y1 - d.y0 - 5)
+        .attr("fill", d => colorScale(d.data.performance) || "gray")
+        .attr("stroke", "#fff")
+        .attr("rx", 5);
+
+    nodes.append("text")
+        .attr("x", d => (d.x1 - d.x0) / 2)
+        .attr("y", 15)
+        .text(d => d.data.name)
+        .attr("class", "stock-label")
+        .attr("font-size", "14px")
+        .attr("font-weight", "bold")
+        .attr("text-anchor", "middle")
+        .attr("fill", "black");
+
+    nodes.append("text")
+        .attr("x", d => (d.x1 - d.x0) / 2)
+        .attr("y", 30)
+        .text(d => `${d.data.performance.toFixed(2)}%`)
+        .attr("class", "stock-return")
+        .attr("font-size", "12px")
+        .attr("text-anchor", "middle")
+        .attr("fill", "black");
+}
+
