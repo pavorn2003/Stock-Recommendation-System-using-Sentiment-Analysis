@@ -460,69 +460,116 @@ window.addEventListener("DOMContentLoaded", () => {
         
                 const result = await response.json();
                 console.log("API Response:", result);
-        
-                localStorage.setItem("apiResultData", JSON.stringify(result.data));
-                window.location.href = "/Website/output.html";
+                localStorage.setItem("apiResultData", JSON.stringify(result));
+
+                setTimeout(() => {
+                    window.location.href = "/Website/output.html";
+                }, 3000);
             } catch (error) {
                 console.error("Error submitting data:", error);
                 alert("Failed to submit. Please try again.");
             }
         });
-        
+
     }
 });
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("✅ Script running in output.html");
+
+    const storedDataRaw = localStorage.getItem("apiResultData");
+    console.log("🔍 Checking localStorage in output.html:", storedDataRaw);
+    const stockList = document.getElementById("stockList");
+    const profitList = document.getElementById("profitList");
+    const newsContainer = document.getElementById("newsContainer");
+    
 
 
+    // ✅ Check if it's null, undefined, or literally the string "undefined"
+    if (!storedDataRaw || storedDataRaw === "undefined") {
+        console.warn("⚠️ No valid apiResultData found in localStorage. Using empty object.");
+        localStorage.removeItem("apiResultData"); // Clean up invalid data
+    }
+    
+    // ✅ Use an empty object `{}` as fallback
+    const storedData = storedDataRaw && storedDataRaw !== "undefined" ? JSON.parse(storedDataRaw) : {};
+    
+    const performanceData = storedData.performance || {};  // ✅ Extract performance data
 
-        // Example Data
-const stocks = ["$NVDA", "$META", "$AAPL", "$GOOGL", "$MSFT"];
-const profits = ["+125%", "+105%", "+80%", "+75%", "+75%"];
+    console.log("📊 Retrieved Performance Data:", performanceData);
 
-// Get elements
-const stockList = document.getElementById("stockList");
-const profitList = document.getElementById("profitList");
+    if (storedData.stock && Object.keys(storedData.stock).length > 0) {
+        console.log("✅ Stocks Retrieved:", storedData.stock);
+        localStorage.setItem("stocksWithSectors", JSON.stringify(storedData.stock));
+    } else {
+        console.warn("⚠️ No stock recommendations received!");
+        stockList.innerHTML = "<li>No recommendations available.</li>";
+        profitList.innerHTML = "<li>-</li>";
+    }
 
-// Populate stock list
-stocks.forEach((stock, index) => {
-    let stockItem = document.createElement("li");
-    stockItem.textContent = stock;
-    stockList.appendChild(stockItem);
+    // ✅ Ensure the Returns section dynamically updates with performance data
+    if (performanceData && Object.keys(performanceData).length > 0) {
+        stockList.innerHTML = "";
+        profitList.innerHTML = "";
 
-    let profitItem = document.createElement("li");
-    profitItem.textContent = profits[index];
-    profitItem.classList.add("green");
-    profitList.appendChild(profitItem);
-});
+        Object.entries(storedData.stock).forEach(([sector, stockArray]) => {
+            stockArray.forEach(stock => {
+                let stockItem = document.createElement("li");
+                stockItem.textContent = `$${stock}`;
+                stockList.appendChild(stockItem);
+
+                let profitItem = document.createElement("li");
+                let returnVal = performanceData[stock]; // ✅ Extract return data
+
+                if (returnVal !== undefined) {
+                    profitItem.textContent = `${returnVal.toFixed(2)}%`;
+                    profitItem.classList.add(returnVal > 0 ? "green" : returnVal < 0 ? "red" : "neutral");
+                } else {
+                    profitItem.textContent = "-";
+                    profitItem.classList.add("neutral");
+                }
+
+                profitList.appendChild(profitItem);
+            });
+        });
+    } else {
+        console.warn("⚠️ No performance data received!");
+        profitList.innerHTML = "<li>-</li>";
+    }
+
+    // ✅ Handling Articles Section
+    if (storedData.articles && Object.keys(storedData.articles).length > 0) {
+        console.log("📰 Articles Retrieved:", storedData.articles);
+        
+        Object.entries(storedData.articles).forEach(([sector, articles]) => {
+            articles.forEach(article => {
+                let newsCard = document.createElement("div");
+                newsCard.classList.add("news_card");
+
+                let stockName = article.stock ? `$${article.stock}` : "Unknown Stock";
+                let summary = article.text 
+                ? article.text.split('. ').slice(0, 2).join('. ') + "..." 
+                : "No summary available.";
+                let articleImage = article.image_url && article.image_url.trim() !== "" 
+                ? article.image_url 
+                : "/Website/images/News_image.png"; 
+
+                newsCard.innerHTML = `
+                    <div class="news_image">
+                        <img src="${articleImage}" alt="News Image" class="article-thumbnail">
+                    </div>
+                    <div class="news_content">
+                        <h3>${stockName} - ${article.article_title || "No Title Available"}</h3>
+                        <p>${summary}</p>
+                        <a href="${article.article_link || "#"}" target="_blank">Read more</a>
+                    </div>
+                `;
 
 
-
-// Example data (each stock gets one news)
-const stockNews = [
-    { stock: "$NVDA", title: "Nvidia's AI Boom", summary: "Nvidia continues to dominate the AI chip market...", link: "#" },
-    { stock: "$META", title: "Meta's VR Expansion", summary: "Meta is pushing further into the metaverse with...", link: "#" },
-    { stock: "$AAPL", title: "Apple's Strong Sales", summary: "Apple reports record-breaking iPhone sales...", link: "#" },
-    { stock: "$GOOGL", title: "Google AI Breakthrough", summary: "Google unveils its most advanced AI model yet...", link: "#" },
-    { stock: "$MSFT", title: "Microsoft Cloud Growth", summary: "Microsoft Azure continues rapid cloud expansion...", link: "#" }
-];
-
-// Get news container
-const newsContainer = document.getElementById("newsContainer");
-
-// Populate news dynamically
-stockNews.forEach(news => {
-    let newsCard = document.createElement("div");
-    newsCard.classList.add("news_card");
-
-    newsCard.innerHTML = `
-        <div class="news_image">
-            <img src="https://via.placeholder.com/80" alt="News Image">
-        </div>
-        <div class="news_content">
-            <h3>${news.stock} - ${news.title}</h3>
-            <p>${news.summary}</p>
-            <a href="${news.link}" target="_blank">Read more</a>
-        </div>
-    `;
-
-    newsContainer.appendChild(newsCard);
+                newsContainer.appendChild(newsCard);
+            });
+        });
+    } else {
+        console.warn("⚠️ No news articles received!");
+        newsContainer.innerHTML = "<p>No news available.</p>";
+    }
 });
