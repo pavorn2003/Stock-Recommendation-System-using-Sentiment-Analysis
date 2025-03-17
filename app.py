@@ -40,10 +40,10 @@ def submit_data():
     filtered_result = filter_stocks_by_sector(sim_result,chosen_sectors).reset_index()
     n_results = get_N_stocks(filtered_result,int(data['numberOfRecommendations'])).reset_index()
     grouped_stocks = group_stocks_by_sector(n_results['stock'].to_list())
-    print("stocks: ",grouped_stocks)
+    print("stocks: ",n_results['stock'])
     performance = calculate_stock_performance(stock=grouped_stocks,holding_period=int(data['selectedTimePeriod']))
     articles = get_articles(grouped_stocks)
-    print(articles)
+    print(performance)
 
     return jsonify({"status": "success", "stock": grouped_stocks,"articles": articles, "performance": performance}) #"preds": preds})
 
