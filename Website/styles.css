@@ -662,17 +662,78 @@
 }
 
 
-/* Quiz Section*/
-
+/* Hero Section - Ensure Character is Visible */
 .quiz_main {
+  display: flex;
   flex-direction: column;
+  justify-content: flex-end; /* Pushes character image down */
+  align-items: center;
+  height: 75vh; /* Ensure enough space for character */
+  background: radial-gradient(circle, #FB5C5C 10%, #953737 100%);
+  position: relative;
+  text-align: center;
+  color: white;
+  overflow: visible; /* Allow overlap */
+}
+/* Move text higher */
+.quiz_main__container {
+    position: relative;
+    z-index: 2;
+    padding-bottom: 35vh; /* Push text much higher */
+}
+
+.quiz_main__content {
+    position: relative;
+    z-index: 2;
+    font-size: 1.8rem;
+    font-weight: bold;
+    padding-bottom: 3rem; /* Add space below text */
+}
+
+
+
+/* Hero Image - Ensure It Stays Visible */
+.quiz_main__image {
+  position: absolute;
+  bottom: -5px; /* Moves character further down */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10; /* Ensures it's on top */
   width: 100%;
-  margin: 0 auto;
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 50vh;
-  background: radial-gradient(circle, #FB5C5C 10%, #953737 100%);
+}
+
+.quiz_main__image img {
+  max-width: 100%;
+  height: auto;
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+/* Results Section - Ensure Overlap */
+.results_section {
+  background-color: white;
+  margin-top: -80px; /* Moves white section up slightly */
+  padding-top: 140px; /* Keeps proper spacing */
+  padding-bottom: 50px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .quiz_main {
+        height: 80vh; /* Adjust for smaller screens */
+    }
+    .quiz_main__image img {
+        max-height: 70vh;
+    }
+    .quiz_main__container {
+        padding-bottom: 40vh; /* Ensure text moves much higher */
+    }
 }
 
 .quiz_main__content {
@@ -995,3 +1056,165 @@ h2 {
   margin-bottom: 10px;
   color: #181818;
 }
+
+/* Results Section */
+.results_section {
+  background-color: white;
+  padding-top: 40px;
+  padding-bottom: 100px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Our Recommendations Heading */
+.results_section h2 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 1px;
+  margin-bottom: 30px;
+  position: relative;
+  color: #333;
+  display: inline-block; /* Ensures proper width alignment */
+  padding-bottom: 10px; /* Space for underline */
+}
+
+/* Full-width Underline */
+.results_section h2::after {
+  content: "";
+  display: block;
+  width: 100%; /* Full width */
+  height: 6px;
+  background: #333; /* Solid dark color */
+  margin-top: 5px;
+  border-radius: 5px;
+}
+
+
+/* Table Layout */
+.results_table {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 80px; /* Space between columns */
+  max-width: 600px;
+  margin: 0 auto;
+  border: 2px solid #ddd; /* Soft border */
+  border-radius: 10px;
+  padding: 30px;
+  background: #f9f9f9;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Column Styling */
+.column {
+  flex: 1;
+  text-align: left;
+}
+
+/* Headers */
+.column h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  border-bottom: 3px solid #FB5C5C;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+/* List Styling */
+.column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.column li {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 5px 0;
+}
+
+/* Green Profit Values */
+.profits li {
+  color: green;
+}
+
+/* News Section */
+.news_section {
+  background-color: #f8f8f8;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.news_section h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+/* News Container */
+#newsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* News Card */
+.news_card {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  width: 80%;
+  max-width: 800px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+}
+
+.news_image {
+  width: 80px;
+  height: 80px;
+  background: #ddd;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.news_content {
+  flex: 1;
+  text-align: left;
+}
+
+.news_content h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.news_content p {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 5px 0;
+}
+
+.news_content a {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: #FB5C5C;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+.news_content a:hover {
+  background: #953737;
+}
+

@@ -474,3 +474,55 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 
+        // Example Data
+const stocks = ["$NVDA", "$META", "$AAPL", "$GOOGL", "$MSFT"];
+const profits = ["+125%", "+105%", "+80%", "+75%", "+75%"];
+
+// Get elements
+const stockList = document.getElementById("stockList");
+const profitList = document.getElementById("profitList");
+
+// Populate stock list
+stocks.forEach((stock, index) => {
+    let stockItem = document.createElement("li");
+    stockItem.textContent = stock;
+    stockList.appendChild(stockItem);
+
+    let profitItem = document.createElement("li");
+    profitItem.textContent = profits[index];
+    profitItem.classList.add("green");
+    profitList.appendChild(profitItem);
+});
+
+
+
+// Example data (each stock gets one news)
+const stockNews = [
+    { stock: "$NVDA", title: "Nvidia's AI Boom", summary: "Nvidia continues to dominate the AI chip market...", link: "#" },
+    { stock: "$META", title: "Meta's VR Expansion", summary: "Meta is pushing further into the metaverse with...", link: "#" },
+    { stock: "$AAPL", title: "Apple's Strong Sales", summary: "Apple reports record-breaking iPhone sales...", link: "#" },
+    { stock: "$GOOGL", title: "Google AI Breakthrough", summary: "Google unveils its most advanced AI model yet...", link: "#" },
+    { stock: "$MSFT", title: "Microsoft Cloud Growth", summary: "Microsoft Azure continues rapid cloud expansion...", link: "#" }
+];
+
+// Get news container
+const newsContainer = document.getElementById("newsContainer");
+
+// Populate news dynamically
+stockNews.forEach(news => {
+    let newsCard = document.createElement("div");
+    newsCard.classList.add("news_card");
+
+    newsCard.innerHTML = `
+        <div class="news_image">
+            <img src="https://via.placeholder.com/80" alt="News Image">
+        </div>
+        <div class="news_content">
+            <h3>${news.stock} - ${news.title}</h3>
+            <p>${news.summary}</p>
+            <a href="${news.link}" target="_blank">Read more</a>
+        </div>
+    `;
+
+    newsContainer.appendChild(newsCard);
+});
