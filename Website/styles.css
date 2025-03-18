@@ -524,18 +524,38 @@
   flex-direction: column;
   justify-content: flex-end; /* Pushes character image down */
   align-items: center;
-  height: 75vh; /* Ensure enough space for character */
+  height: 50vh; /* Ensure enough space for character */
   background: radial-gradient(circle, #FB5C5C 10%, #953737 100%);
   position: relative;
   text-align: center;
   color: white;
   overflow: visible; /* Allow overlap */
 }
+
+.output_main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Pushes character image down */
+  align-items: center;
+  height: 80vh; /* Ensure enough space for character */
+  background: radial-gradient(circle, #FB5C5C 10%, #953737 100%);
+  position: relative;
+  text-align: center;
+  color: white;
+  overflow: visible; /* Allow overlap */
+}
+
 /* Move text higher */
 .quiz_main__container {
     position: relative;
     z-index: 2;
-    padding-bottom: 35vh; /* Push text much higher */
+    padding-bottom: 15vh; /* Push text much higher */
+}
+
+.output_main__container {
+  position: relative;
+  z-index: 2;
+  padding-bottom: 35vh; /* Push text much higher */
 }
 
 .quiz_main__content {
@@ -546,12 +566,19 @@
     padding-bottom: 3rem; /* Add space below text */
 }
 
+.output_main__content {
+  position: relative;
+  z-index: 2;
+  font-size: 1.8rem;
+  font-weight: bold;
+  padding-bottom: 3rem; /* Add space below text */
+}
 
 
 /* Hero Image - Ensure It Stays Visible */
 .quiz_main__image {
   position: absolute;
-  bottom: -5px; /* Moves character further down */
+  bottom: -30px; /* Moves character further down */
   left: 50%;
   transform: translateX(-50%);
   z-index: 10; /* Ensures it's on top */
