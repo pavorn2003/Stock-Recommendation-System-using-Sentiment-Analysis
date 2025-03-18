@@ -1,90 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Stocky</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
-      integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
-      crossorigin="anonymous"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <!-- Navbar Section -->
-    <nav class="navbar">
-      <div class="navbar__container">
-        <a href="index.html" id="navbar__logo"><i class="muic-logo"></i>
-          <img id="muic" src="images/Mahidol_U.png" />
-        </a>
-        <div class="navbar__toggle" id="mobile-menu">
-          <span class="bar"></span> <span class="bar"></span>
-          <span class="bar"></span>
-        </div>
-        <ul class="navbar__menu">
-          <li class="navbar__item">
-            <a href="about.html" class="navbar__links"> About</a>
-          </li>
-          <li class="navbar__btn">
-            <a href="quiz.html" class="button"> Get Started</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <div class="quiz_main">
-      <div class="quiz_main__container">
-        <div class="quiz_main__content">
-          <h1>What recommendations do you need?</h1>
-          <h2>One final part!!!</h2>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stocky</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+    integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <!-- Navbar Section -->
+  <nav class="navbar">
+    <div class="navbar__container">
+      <a href="/index.html" id="navbar__logo"><i class="muic-logo"></i>
+        <img id="muic" src="/images/Mahidol_U.png" />
+      </a>
+      <div class="navbar__toggle" id="mobile-menu">
+        <span class="bar"></span> <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+      <ul class="navbar__menu">
+        <li class="navbar__item">
+          <a href="about.html" class="navbar__links"> About</a>
+        </li>
+        <li class="navbar__btn">
+          <a href="quiz.html" class="button"> Get Started</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="quiz_main">
+    <div class="quiz_main__container">
+      <div class="quiz_main__content">
+        <h1>What recommendations do you need?</h1>
+        <h2>One final part!!!</h2>
       </div>
     </div>
-
-
-    <!-- Sector Section -->
-    <div class="container">
-      <h2 class="sector-title">What sectors are you interested in?</h2>
-      
-      <!-- Wheel Container -->
-      <div class="wheel-container">
-          <div class="sector-wrapper"> 
-          </div>
-          <div class="center-circle"></div> 
-      </div>
-    
-      <!-- Reset Button -->
-      <button id="reset-btn" class="quiz-btn">Reset Selections</button>
-  
-      <!-- Period selector Buttons -->
-      <div class="container">
-        <p class="label">Select Time Period</p>
-        <div class="time-selector-options">
-            <div class="time-option" data-time="3">3 Months</div>
-            <div class="time-option" data-time="6">6 Months</div>
-            <div class="time-option" data-time="12">12 Months</div>
-        </div>
-
-        <p class="label">Select Number of Recommendations</p>
-        <select class="recommendations-select" id="recommendations">
-        </select>
-    </div>
-
-      <!-- Submit Button -->
-      <div class="submit-btn-container">
-          <button id="submit-btn" class="submit-btn">Submit Answers</button>
-      </div>
   </div>
-  
 
-    <!-- Footer Section -->
+
+  <!-- Sector Section -->
+  <div class="container">
+    <h2 class="sector-title">What sectors are you interested in?</h2>
+
+    <!-- Wheel Container -->
+    <div class="wheel-container">
+      <div class="sector-wrapper">
+      </div>
+      <div class="center-circle"></div>
+    </div>
+
+    <!-- Reset Button -->
+    <button id="reset-btn" class="quiz-btn">Reset Selections</button>
+
+    <!-- Period selector Buttons -->
+    <div class="container">
+      <p class="label">Select Time Period</p>
+      <div class="time-selector-options">
+        <div class="time-option" data-time="3">3 Months</div>
+        <div class="time-option" data-time="6">6 Months</div>
+        <div class="time-option" data-time="12">12 Months</div>
+      </div>
+
+      <p class="label">Select Number of Recommendations</p>
+      <select class="recommendations-select" id="recommendations">
+      </select>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="submit-btn-container">
+      <button id="submit-btn" class="submit-btn">Submit Answers</button>
+    </div>
+  </div>
+
+
+  <!-- Footer Section -->
   <div class="footer__container">
     <section class="team">
       <h2>Meet Our Team</h2>
@@ -113,10 +108,10 @@
       </div>
     </section>
 
-      <p class="website__rights">© MUIC EGCI 2025. All rights reserved</p>
-    </div>
-    </div>
-    <script src="app.js"></script>
-  </body>
+    <p class="website__rights">© MUIC EGCI 2025. All rights reserved</p>
+  </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+
 </html>
-       

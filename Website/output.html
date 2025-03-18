@@ -1,118 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Stocky</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
-      integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
-      crossorigin="anonymous"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <!-- Navbar Section -->
-    <nav class="navbar">
-      <div class="navbar__container">
-        <a href="index.html" id="navbar__logo"><i class="muic-logo"></i>
-          <img id="muic" src="images/Mahidol_U.png" />
-        </a>
-        <div class="navbar__toggle" id="mobile-menu">
-          <span class="bar"></span> <span class="bar"></span>
-          <span class="bar"></span>
-        </div>
-        <ul class="navbar__menu">
-          <li class="navbar__item">
-            <a href="about.html" class="navbar__links"> About</a>
-          </li>
-          <li class="navbar__btn">
-            <a href="quiz.html" class="button"> Get Started</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <div class="output_main">
-      <div class="output_main__container">
-          <div class="output_main__content">
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stocky</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+    integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <!-- Navbar Section -->
+  <nav class="navbar">
+    <div class="navbar__container">
+      <a href="index.html" id="navbar__logo"><i class="muic-logo"></i>
+        <img id="muic" src="images/Mahidol_U.png" />
+      </a>
+      <div class="navbar__toggle" id="mobile-menu">
+        <span class="bar"></span> <span class="bar"></span>
+        <span class="bar"></span>
       </div>
-      <div class="quiz_main__image">
-          <img src="images/Hero_output.png" alt="Character">
+      <ul class="navbar__menu">
+        <li class="navbar__item">
+          <a href="about.html" class="navbar__links"> About</a>
+        </li>
+        <li class="navbar__btn">
+          <a href="quiz.html" class="button"> Get Started</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="output_main">
+    <div class="output_main__container">
+      <div class="output_main__content">
       </div>
+    </div>
+    <div class="quiz_main__image">
+      <img src="images/Hero_output.png" alt="Character">
+    </div>
   </div>
 
   <!-- Results Section -->
-<div class="results_section">
-  <h2>Our Recommendations</h2>
-  <div class="results_table">
+  <div class="results_section">
+    <h2>Our Recommendations</h2>
+    <div class="results_table">
       <div class="column">
-          <h3>Stock</h3>
-          <ul id="stockList"></ul>
+        <h3>Stock</h3>
+        <ul id="stockList"></ul>
       </div>
       <div class="column">
-          <h3 id="plHeader">P/L</h3>
-          <ul id="profitList"></ul>
-      </div>
-  </div>
-</div>
-
-<!-- Sector Performance Heatmap Card -->
-<div class="sector_card">
-  <h2></h2>
-  <div id="sectorHeatmap"></div>
-</div>
-
-
-<!-- News Section -->
-<div class="news_section">
-  <h2>See what people are saying</h2>
-  <div id="newsContainer"></div>
-</div>
-
-<!-- Footer Section -->
-<div class="footer__container">
-  <section class="team">
-    <h2>Meet Our Team</h2>
-    <div class="team__container">
-      <div class="team__member">
-        <img src="images/Guy.jpeg" alt="">
-        <p class="team__name">Pachara Akkanwanich</p>
-        <a href="https://linkedin.com/in/pachara-akkanwanich-08258a285" target="_blank" class="linkedin-icon">
-          <i class="fab fa-linkedin"></i>
-        </a>
-      </div>
-      <div class="team__member">
-        <img src="images/Big.jpeg" alt="">
-        <p class="team__name">Panachai Kongja</p>
-        <a href="https://www.linkedin.com/in/pkongja/" target="_blank" class="linkedin-icon">
-          <i class="fab fa-linkedin"></i>
-        </a>
-      </div>
-      <div class="team__member">
-        <img src="images/Pavorn.jpeg" alt="">
-        <p class="team__name">Pavorn Thongyoo</p>
-        <a href="https://www.linkedin.com/in/pavorn-thongyoo/" target="_blank" class="linkedin-icon">
-          <i class="fab fa-linkedin"></i>
-        </a>
+        <h3 id="plHeader">P/L</h3>
+        <ul id="profitList"></ul>
       </div>
     </div>
-  </section>
+  </div>
+
+  <!-- Sector Performance Heatmap Card -->
+  <div class="sector_card">
+    <h2></h2>
+    <div id="sectorHeatmap"></div>
+  </div>
+
+
+  <!-- News Section -->
+  <div class="news_section">
+    <h2>See what people are saying</h2>
+    <div id="newsContainer"></div>
+  </div>
+
+  <!-- Footer Section -->
+  <div class="footer__container">
+    <section class="team">
+      <h2>Meet Our Team</h2>
+      <div class="team__container">
+        <div class="team__member">
+          <img src="images/Guy.jpeg" alt="">
+          <p class="team__name">Pachara Akkanwanich</p>
+          <a href="https://linkedin.com/in/pachara-akkanwanich-08258a285" target="_blank" class="linkedin-icon">
+            <i class="fab fa-linkedin"></i>
+          </a>
+        </div>
+        <div class="team__member">
+          <img src="images/Big.jpeg" alt="">
+          <p class="team__name">Panachai Kongja</p>
+          <a href="https://www.linkedin.com/in/pkongja/" target="_blank" class="linkedin-icon">
+            <i class="fab fa-linkedin"></i>
+          </a>
+        </div>
+        <div class="team__member">
+          <img src="images/Pavorn.jpeg" alt="">
+          <p class="team__name">Pavorn Thongyoo</p>
+          <a href="https://www.linkedin.com/in/pavorn-thongyoo/" target="_blank" class="linkedin-icon">
+            <i class="fab fa-linkedin"></i>
+          </a>
+        </div>
+      </div>
+    </section>
 
     <p class="website__rights">© MUIC EGCI 2025. All rights reserved</p>
   </div>
 
-    
-    </div>
-    <script src="app.js"></script>
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-  </body>
+
+  </div>
+  <script src="app.js"></script>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+</body>
+
 </html>
-       

@@ -1,141 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Stocky</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
-      integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
-      crossorigin="anonymous"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <!-- Navbar Section -->
-    <nav class="navbar">
-      <div class="navbar__container">
-        <a href="/index.html" id="navbar__logo"><i class="muic-logo"></i>
-          <img id="muic" src="images/Mahidol_U.png" />
-        </a>
-        <div class="navbar__toggle" id="mobile-menu">
-          <span class="bar"></span> <span class="bar"></span>
-          <span class="bar"></span>
-        </div>
-        <ul class="navbar__menu">
-          <li class="navbar__item">
-            <a href="/about.html" class="navbar__links"> About</a>
-          </li>
-          <li class="navbar__btn">
-            <a href="/quiz.html" class="button"> Get Started</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <div class="quiz_main">
-      <div class="quiz_main__container">
-        <div class="quiz_main__content">
-          <h1>What Stock Is Right For You?</h1>
-          <h2>Find out with a quick test</h2>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stocky</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+    integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <!-- Navbar Section -->
+  <nav class="navbar">
+    <div class="navbar__container">
+      <a href="/index.html" id="navbar__logo"><i class="muic-logo"></i>
+        <img id="muic" src="images/Mahidol_U.png" />
+      </a>
+      <div class="navbar__toggle" id="mobile-menu">
+        <span class="bar"></span> <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+      <ul class="navbar__menu">
+        <li class="navbar__item">
+          <a href="/about.html" class="navbar__links"> About</a>
+        </li>
+        <li class="navbar__btn">
+          <a href="/quiz.html" class="button"> Get Started</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="quiz_main">
+    <div class="quiz_main__container">
+      <div class="quiz_main__content">
+        <h1>What Stock Is Right For You?</h1>
+        <h2>Find out with a quick test</h2>
       </div>
     </div>
+  </div>
 
 
-    <!-- Quiz Section -->
-    <div class="quiz_container">
-      <!-- Question 15 -->
-      <div class="quiz" id="question-15">
-        <h2>I feel more comfortable investing in companies that are popular among other investors.</h2>
-        <div class="options">
-            <div class="circle" data-question="q15" data-value="strongly-disagree"></div>
-            <div class="circle" data-question="q15" data-value="disagree"></div>
-            <div class="circle" data-question="q15" data-value="neutral"></div>
-            <div class="circle" data-question="q15" data-value="agree"></div>
-            <div class="circle" data-question="q15" data-value="strongly-agree"></div>
-        </div>
+  <!-- Quiz Section -->
+  <div class="quiz_container">
+    <!-- Question 15 -->
+    <div class="quiz" id="question-15">
+      <h2>I feel more comfortable investing in companies that are popular among other investors.</h2>
+      <div class="options">
+        <div class="circle" data-question="q15" data-value="strongly-disagree"></div>
+        <div class="circle" data-question="q15" data-value="disagree"></div>
+        <div class="circle" data-question="q15" data-value="neutral"></div>
+        <div class="circle" data-question="q15" data-value="agree"></div>
+        <div class="circle" data-question="q15" data-value="strongly-agree"></div>
+      </div>
     </div>
 
     <!-- Question 16 (Initially Disabled) -->
     <div class="quiz disabled" id="question-16">
-        <h2>Seeing my portfolio value go up and down doesn’t bother me.</h2>
-        <div class="options">
-            <div class="circle" data-question="q16" data-value="strongly-disagree"></div>
-            <div class="circle" data-question="q16" data-value="disagree"></div>
-            <div class="circle" data-question="q16" data-value="neutral"></div>
-            <div class="circle" data-question="q16" data-value="agree"></div>
-            <div class="circle" data-question="q16" data-value="strongly-agree"></div>
-        </div>
+      <h2>Seeing my portfolio value go up and down doesn’t bother me.</h2>
+      <div class="options">
+        <div class="circle" data-question="q16" data-value="strongly-disagree"></div>
+        <div class="circle" data-question="q16" data-value="disagree"></div>
+        <div class="circle" data-question="q16" data-value="neutral"></div>
+        <div class="circle" data-question="q16" data-value="agree"></div>
+        <div class="circle" data-question="q16" data-value="strongly-agree"></div>
+      </div>
     </div>
 
     <!-- Question 17 (Initially Disabled) -->
     <div class="quiz disabled" id="question-17">
       <h2 id="question-text">I enjoy tracking percentage changes in stock prices over short periods.</h2>
       <div class="options">
-          <div class="circle" data-question="q17" data-value="strongly-disagree"></div>
-          <div class="circle" data-question="q17" data-value="disagree"></div>
-          <div class="circle" data-question="q17" data-value="neutral"></div>
-          <div class="circle" data-question="q17" data-value="agree"></div>
-          <div class="circle" data-question="q17" data-value="strongly-agree"></div>
+        <div class="circle" data-question="q17" data-value="strongly-disagree"></div>
+        <div class="circle" data-question="q17" data-value="disagree"></div>
+        <div class="circle" data-question="q17" data-value="neutral"></div>
+        <div class="circle" data-question="q17" data-value="agree"></div>
+        <div class="circle" data-question="q17" data-value="strongly-agree"></div>
       </div>
     </div>
     <!-- Question 18 (Initially Disabled) -->
     <div class="quiz disabled" id="question-18">
       <h2 id="question-text">Consistency in a stock’s performance is more important to me than big gains.</h2>
       <div class="options">
-          <div class="circle" data-question="q18" data-value="strongly-disagree"></div>
-          <div class="circle" data-question="q18" data-value="disagree"></div>
-          <div class="circle" data-question="q18" data-value="neutral"></div>
-          <div class="circle" data-question="q18" data-value="agree"></div>
-          <div class="circle" data-question="q18" data-value="strongly-agree"></div>
+        <div class="circle" data-question="q18" data-value="strongly-disagree"></div>
+        <div class="circle" data-question="q18" data-value="disagree"></div>
+        <div class="circle" data-question="q18" data-value="neutral"></div>
+        <div class="circle" data-question="q18" data-value="agree"></div>
+        <div class="circle" data-question="q18" data-value="strongly-agree"></div>
       </div>
     </div>
     <!-- Question 19 (Initially Disabled) -->
     <div class="quiz disabled" id="question-19">
       <h2 id="question-text">I’m less interested in stocks that have wide price ranges day-to-day.</h2>
       <div class="options">
-          <div class="circle" data-question="q19" data-value="strongly-disagree"></div>
-          <div class="circle" data-question="q19" data-value="disagree"></div>
-          <div class="circle" data-question="q19" data-value="neutral"></div>
-          <div class="circle" data-question="q19" data-value="agree"></div>
-          <div class="circle" data-question="q19" data-value="strongly-agree"></div>
+        <div class="circle" data-question="q19" data-value="strongly-disagree"></div>
+        <div class="circle" data-question="q19" data-value="disagree"></div>
+        <div class="circle" data-question="q19" data-value="neutral"></div>
+        <div class="circle" data-question="q19" data-value="agree"></div>
+        <div class="circle" data-question="q19" data-value="strongly-agree"></div>
       </div>
     </div>
     <!-- Question 20 (Initially Disabled) -->
     <div class="quiz disabled" id="question-20">
       <h2 id="question-text">When a stock is trending upwards, I don’t want to miss out.</h2>
       <div class="options">
-          <div class="circle" data-question="q20" data-value="strongly-disagree"></div>
-          <div class="circle" data-question="q20" data-value="disagree"></div>
-          <div class="circle" data-question="q20" data-value="neutral"></div>
-          <div class="circle" data-question="q20" data-value="agree"></div>
-          <div class="circle" data-question="q20" data-value="strongly-agree"></div>
+        <div class="circle" data-question="q20" data-value="strongly-disagree"></div>
+        <div class="circle" data-question="q20" data-value="disagree"></div>
+        <div class="circle" data-question="q20" data-value="neutral"></div>
+        <div class="circle" data-question="q20" data-value="agree"></div>
+        <div class="circle" data-question="q20" data-value="strongly-agree"></div>
       </div>
     </div>
     <!-- Question 21 (Initially Disabled) -->
     <div class="quiz disabled" id="question-21">
       <h2 id="question-text">Chasing trends is part of the fun of investing.</h2>
       <div class="options">
-          <div class="circle" data-question="q21" data-value="strongly-disagree"></div>
-          <div class="circle" data-question="q21" data-value="disagree"></div>
-          <div class="circle" data-question="q21" data-value="neutral"></div>
-          <div class="circle" data-question="q21" data-value="agree"></div>
-          <div class="circle" data-question="q21" data-value="strongly-agree"></div>
+        <div class="circle" data-question="q21" data-value="strongly-disagree"></div>
+        <div class="circle" data-question="q21" data-value="disagree"></div>
+        <div class="circle" data-question="q21" data-value="neutral"></div>
+        <div class="circle" data-question="q21" data-value="agree"></div>
+        <div class="circle" data-question="q21" data-value="strongly-agree"></div>
       </div>
     </div>
-        <div class="button-container">
-          <button class="quiz-btn" onclick="goBack()">Previous Page</button>
-          <button class="quiz-btn" onclick="nextPage3()">Next Page</button>
-      </div>
+    <div class="button-container">
+      <button class="quiz-btn" onclick="goBack()">Previous Page</button>
+      <button class="quiz-btn" onclick="nextPage3()">Next Page</button>
     </div>
-</div>
+  </div>
+  </div>
 
   <!-- Footer Section -->
   <div class="footer__container">
@@ -166,11 +161,11 @@
       </div>
     </section>
 
-      <p class="website__rights">© MUIC EGCI 2025. All rights reserved</p>
-    </div>
+    <p class="website__rights">© MUIC EGCI 2025. All rights reserved</p>
+  </div>
 
-    </div>
-    <script src="app.js"></script>
-  </body>
+  </div>
+  <script src="app.js"></script>
+</body>
+
 </html>
-       
