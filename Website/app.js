@@ -1,12 +1,12 @@
 // ✅ Page Navigation Functions (Now Globally Available)
 function nextPage1() {
-    window.location.href = "/quiz2.html";
+    window.location.href = "quiz2.html";
 }
 function nextPage2() {
-    window.location.href = "/quiz3.html";
+    window.location.href = "quiz3.html";
 }
 function nextPage3() {
-    window.location.href = "/sectors.html";
+    window.location.href = "sectors.html";
 }
 function goBack() {
     window.history.back();
@@ -426,7 +426,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 localStorage.setItem("apiResultData", JSON.stringify(result));
 
                 setTimeout(() => {
-                    window.location.href = "/output.html";
+                    window.location.href = "output.html";
                 }, 3000);
             } catch (error) {
                 console.error("Error submitting data:", error);
