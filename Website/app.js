@@ -559,16 +559,23 @@ function renderHeatmap(stockData, performanceData) {
     const baseHeight = 500;
     const sectorCount = Object.keys(stockData).length;
     const totalStocks = Object.values(stockData).flat().length;
-
+    
     // 🔥 Dynamically adjust height based on number of stocks & sectors
     const dynamicHeight = Math.max(baseHeight, sectorCount * 100, totalStocks * 50);
+    const sectorNames = Object.keys(stockData); // Get sector names directly
+    const longestSectorName = sectorNames.length > 0 
+        ? Math.max(...sectorNames.map(name => name.length)) 
+        : 10; // Default if empty
+    
+    const dynamicWidth = Math.max(900, 900 + longestSectorName * 8); // Ensure minimum width
+    
 
     const container = d3.select("#sectorHeatmap");
     container.html("");
 
     const card = container.append("div")
         .attr("class", "heatmap-card")
-        .style("width", `${baseWidth + 40}px`)
+        .style("width", `${dynamicWidth + 40}px`)
         .style("height", `${dynamicHeight + 100}px`);
 
     card.append("h2")
@@ -576,11 +583,11 @@ function renderHeatmap(stockData, performanceData) {
         .text("Stock Performance by Sector");
 
     const svg = card.append("svg")
-        .attr("width", baseWidth)
+        .attr("width", dynamicWidth)
         .attr("height", dynamicHeight);
 
     const treemap = d3.treemap()
-        .size([baseWidth, dynamicHeight])
+        .size([dynamicWidth, dynamicHeight])
         .paddingInner(20)
         .paddingOuter(12)
         .round(true);
@@ -613,6 +620,17 @@ function renderHeatmap(stockData, performanceData) {
         .sum(d => d.children ? 0 : Math.max(d.value, 2));
 
     treemap(root);
+    
+    // Compute sector-wise average returns
+    const sectorAverages = {};
+    Object.entries(stockData).forEach(([sector, stocks]) => {
+        const validStocks = stocks.filter(stock => performanceData[stock] !== undefined);
+        if (validStocks.length > 0) {
+            const avgReturn = validStocks.reduce((sum, stock) => sum + performanceData[stock], 0) / validStocks.length;
+            sectorAverages[sector] = avgReturn.toFixed(2);
+        }
+    });
+
 
     const sectorGroups = svg.selectAll(".sector-group")
         .data(root.children)
@@ -621,13 +639,14 @@ function renderHeatmap(stockData, performanceData) {
         .attr("class", "sector-group")
         .attr("transform", d => `translate(${d.x0},${d.y0 + 20})`);
 
-    sectorGroups.append("text")
-        .attr("x", d => (d.x1 - d.x0) / 2) // Centers dynamically
-        .attr("y", -15)  // Moves it slightly up
-        .text(d => d.data.name.toUpperCase())
-        .attr("class", "sector-label")
-        .style("text-anchor", "middle") // Ensures alignment
-        .style("font-size", d => Math.max(14, Math.min(24, (d.x1 - d.x0) / d.data.name.length)) + "px"); // Dynamic font-size
+        sectorGroups.append("text")
+        .attr("x", d => (d.x1 - d.x0) / 2)
+        .attr("y", -10)  // Move label higher
+        .attr("text-anchor", "middle")
+        .attr("font-weight", "bold")
+        .attr("font-size", "16px")
+        .text(d => `${d.data.name} (${sectorAverages[d.data.name]}%)`);  // Add avg return
+    
     
 
     sectorGroups.append("rect")

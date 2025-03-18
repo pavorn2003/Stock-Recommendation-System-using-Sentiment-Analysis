@@ -1262,6 +1262,10 @@ h2 {
   margin-bottom: 10px;
 }
 
+.sector-group {
+  margin-right: 15px; /* Adds space to the right */
+}
+
 .sector-group rect {
   stroke-width: 2;
 }
@@ -1276,6 +1280,7 @@ h2 {
 }
 
 .sector-label {
+  font-size: 18px;
   font-weight: bold;
   fill: black;
   text-transform: uppercase;
