@@ -1,4 +1,3 @@
-// ✅ Page Navigation Functions (Now Globally Available)
 function nextPage1() {
   window.location.href = "quiz2.html";
 }
@@ -13,7 +12,6 @@ function goBack() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  // ✅ Mobile Menu Toggle
   const menu = document.querySelector("#mobile-menu");
   const menuLinks = document.querySelector(".navbar__menu");
 
@@ -24,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ✅ Quiz Responses Storage
   let responses = JSON.parse(localStorage.getItem("quizResponses")) || {};
 
   function saveResponse(question, value) {
@@ -38,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function () {
       let value = circle.dataset.value;
 
       if (responses[question] === value) {
-        // ✅ Remove any existing selections for the question
         document
           .querySelectorAll(`.circle[data-question="${question}"]`)
           .forEach((c) =>
@@ -51,13 +47,11 @@ document.addEventListener("DOMContentLoaded", function () {
             )
           );
 
-        // ✅ Apply the correct selected class
         circle.classList.add(`selected-${value}`);
       }
     });
   }
 
-  // ✅ Enable Next Question Logic
   function enableNextQuestion() {
     const quizzes = document.querySelectorAll(".quiz");
 
@@ -65,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
       if (index < quizzes.length - 1) {
         const nextQuiz = quizzes[index + 1];
 
-        // ✅ Ensure next question starts disabled
         if (nextQuiz.querySelectorAll(".circle").length == 5) {
           nextQuiz.classList.add("disabled");
           nextQuiz.style.pointerEvents = "none";
@@ -79,7 +72,6 @@ document.addEventListener("DOMContentLoaded", function () {
             let question = circle.dataset.question;
             let value = circle.dataset.value;
 
-            // ✅ Remove previous selection
             quiz
               .querySelectorAll(".circle")
               .forEach((c) =>
@@ -92,10 +84,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 )
               );
 
-            // ✅ Add selection class
             circle.classList.add(`selected-${value}`);
 
-            // ✅ Enable the next question
             nextQuiz.classList.remove("disabled");
             nextQuiz.style.pointerEvents = "auto";
             nextQuiz.style.opacity = "1";
@@ -125,7 +115,6 @@ document.addEventListener("DOMContentLoaded", function () {
       let question = circle.dataset.question;
       let value = circle.dataset.value;
 
-      // ✅ Remove previous selection for the same question
       document
         .querySelectorAll(`.circle[data-question="${question}"]`)
         .forEach((c) =>
@@ -138,10 +127,8 @@ document.addEventListener("DOMContentLoaded", function () {
           )
         );
 
-      // ✅ Add selected class based on value
       circle.classList.add(`selected-${value}`);
 
-      // ✅ Save response persistently
       saveResponse(question, value);
     });
   });
@@ -151,7 +138,6 @@ document.addEventListener("DOMContentLoaded", function () {
   enableSelected();
 });
 
-// ✅ Next Page Button Fix
 const nextButtons = document.querySelectorAll(".next-btn");
 nextButtons.forEach((button) => {
   button.addEventListener("click", function () {
@@ -167,7 +153,6 @@ if (backButton) {
   backButton.addEventListener("click", goBack);
 }
 
-// ✅ SECTORS WHEEL (Fixed Version)
 document.addEventListener("DOMContentLoaded", function () {
   const sectors = [
     "Basic Materials",
@@ -184,16 +169,14 @@ document.addEventListener("DOMContentLoaded", function () {
   ];
 
   const container = document.querySelector(".wheel-container");
-  if (!container) return; // ✅ Avoid errors if this page doesn't have a sector wheel
+  if (!container) return; 
 
   const totalSectors = sectors.length;
   const angleStep = 360 / totalSectors;
 
-  // ✅ Retrieve selection state (Boolean storage)
   let sectorSelection =
     JSON.parse(localStorage.getItem("sectorSelection")) || {};
 
-  // ✅ Ensure all sectors exist in storage, default to 0
   sectors.forEach((sector) => {
     if (!(sector in sectorSelection)) {
       sectorSelection[sector] = 0;
@@ -204,7 +187,6 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.setItem("sectorSelection", JSON.stringify(sectorSelection));
   }
 
-  // ✅ Create sector slices dynamically
   sectors.forEach((sector, index) => {
     const startAngle = index * angleStep;
     const endAngle = startAngle + angleStep;
@@ -213,7 +195,6 @@ document.addEventListener("DOMContentLoaded", function () {
     sectorDiv.classList.add("sector");
     sectorDiv.style.transform = `rotate(${startAngle}deg)`;
 
-    // ✅ Correct Sector Shape Using Clip-Path
     sectorDiv.style.clipPath = `polygon(
             50% 50%, 
             ${50 + 50 * Math.cos(((startAngle - 90) * Math.PI) / 180)}% ${
@@ -224,12 +205,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }%
         )`;
 
-    // ✅ Create label
     const textSpan = document.createElement("span");
     textSpan.textContent = sector;
     textSpan.classList.add("sector-label");
 
-    // ✅ Position label inside sector
     const textAngle = startAngle + angleStep / 2;
     const textX = 50 + 32 * Math.cos(((textAngle - 90) * Math.PI) / 180);
     const textY = 50 + 32 * Math.sin(((textAngle - 90) * Math.PI) / 180);
@@ -240,24 +219,22 @@ document.addEventListener("DOMContentLoaded", function () {
     sectorDiv.appendChild(textSpan);
     container.appendChild(sectorDiv);
 
-    // ✅ Restore selection state
     if (sectorSelection[sector] === 1) {
       sectorDiv.classList.add("selected");
     }
 
-    // ✅ Click Event for Selection & Unselection
     sectorDiv.addEventListener("click", () => {
       if (sectorSelection[sector] === 1) {
-        sectorSelection[sector] = 0; // Deselect
+        sectorSelection[sector] = 0; 
         sectorDiv.classList.remove("selected");
       } else {
-        sectorSelection[sector] = 1; // Select
+        sectorSelection[sector] = 1; 
         sectorDiv.classList.add("selected");
       }
       updateLocalStorage();
     });
 
-    // ✅ Hover Effect
+    
     sectorDiv.addEventListener("mouseover", () => {
       sectorDiv.classList.add("hover");
     });
@@ -267,7 +244,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // ✅ Reset Function to Clear Selections
   function resetSelections() {
     sectors.forEach((sector) => {
       sectorSelection[sector] = 0;
@@ -284,7 +260,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Mapping of feature to question IDs
   const featureMapping = {
     avg_volume: ["q1", "q8", "q15"],
     volatility: ["q2", "q9", "q16"],
@@ -295,7 +270,6 @@ document.addEventListener("DOMContentLoaded", function () {
     extra: ["q7", "q14", "q21"],
   };
 
-  // Convert text responses to numeric values
   const valueMapping = {
     "strongly-disagree": 0,
     disagree: 0.25,
@@ -304,14 +278,12 @@ document.addEventListener("DOMContentLoaded", function () {
     "strongly-agree": 1,
   };
 
-  // Retrieve stored quiz responses
   const responses = JSON.parse(localStorage.getItem("quizResponses")) || {};
 
-  // Function to compute the average for each feature
   function computeAverages() {
     let featureScores = {};
 
-    // Iterate through each feature and map its questions
+
     for (const [feature, questions] of Object.entries(featureMapping)) {
       let values = [];
 
@@ -324,7 +296,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       });
 
-      // Compute the average if values exist, else assign null
       featureScores[feature] =
         values.length > 0
           ? (values.reduce((a, b) => a + b, 0) / values.length).toFixed(2)
@@ -334,13 +305,10 @@ document.addEventListener("DOMContentLoaded", function () {
     return featureScores;
   }
 
-  // Compute & Log Final Scores
   const finalScores = computeAverages();
 
-  // Save the final scores to localStorage for further use
   localStorage.setItem("quizFinalScores", JSON.stringify(finalScores));
 
-  // Example: Display Results on Output Page (if needed)
   if (document.getElementById("output-container")) {
     const outputContainer = document.getElementById("output-container");
     outputContainer.innerHTML = `<h2>Your Final Feature Scores</h2>`;
@@ -350,10 +318,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ✅ Only run this on sectors.html
   if (window.location.pathname.includes("sectors.html")) {
     const recommendationSelect = document.getElementById("recommendations");
-    let recommendations = null; // ✅ Declare variable to store latest value
+    let recommendations = null; 
 
     if (recommendationSelect) {
       recommendationSelect.innerHTML = "";
@@ -365,17 +332,15 @@ document.addEventListener("DOMContentLoaded", function () {
         recommendationSelect.appendChild(option);
       }
 
-      // ✅ Load saved recommendation count
       const savedRecommendations = localStorage.getItem("recommendations");
       if (savedRecommendations) {
         recommendationSelect.value = savedRecommendations;
-        recommendations = savedRecommendations; // ✅ Update variable too
+        recommendations = savedRecommendations; 
       }
 
-      // ✅ Update localStorage and JS variable on selection change
       recommendationSelect.addEventListener("change", function () {
         localStorage.setItem("recommendations", this.value);
-        recommendations = this.value; // ✅ Update variable in real time
+        recommendations = this.value; 
         console.log("Updated recommendations:", recommendations);
         console.log("Recommendations in localstorage:", recommendations);
       });
@@ -388,7 +353,6 @@ const options = document.querySelectorAll(".time-option");
 const timeOptions = document.querySelectorAll(".time-option");
 const recommendationSelect = document.getElementById("recommendations");
 
-// Load saved time from localStorage
 const savedTime = localStorage.getItem("time");
 if (savedTime) {
   timeOptions.forEach((option) => {
@@ -400,13 +364,10 @@ if (savedTime) {
 
 timeOptions.forEach((option) => {
   option.addEventListener("click", function () {
-    // Remove selected class from all
     timeOptions.forEach((opt) => opt.classList.remove("selected"));
 
-    // Add selected class to clicked
     this.classList.add("selected");
 
-    // Save selection to localStorage
     localStorage.setItem("time", this.getAttribute("data-time"));
 
     console.log("Selected time:", this.getAttribute("data-time"));
@@ -414,15 +375,12 @@ timeOptions.forEach((option) => {
   });
 });
 
-// ✅ Retrieve feature scores
 const featureScores = JSON.parse(localStorage.getItem("quizFinalScores")) || {};
 
-// ✅ Retrieve sector selections
 const sectorSelections =
   JSON.parse(localStorage.getItem("sectorSelection")) || {};
 const selectedTime = localStorage.getItem("time") || "6";
 const numRecommendations = localStorage.getItem("recommendations") || "10";
-// ✅ Merge sector selections into feature scores
 const finalOutput = {
   ...featureScores,
   ...sectorSelections,
@@ -430,13 +388,13 @@ const finalOutput = {
   numberOfRecommendations: numRecommendations,
 };
 
-// ✅ Save the merged output back to localStorage (so it's available immediately after submit)
+
 localStorage.setItem(
   "finalFeatureScoresWithSectors",
   JSON.stringify(finalOutput)
 );
 
-console.log("Final Feature Scores with Sectors BEFORE Submit:", finalOutput); // Debugging
+console.log("Final Feature Scores with Sectors BEFORE Submit:", finalOutput); 
 
 window.addEventListener("DOMContentLoaded", () => {
   const submitBtn = document.querySelector("#submit-btn");
@@ -447,7 +405,7 @@ window.addEventListener("DOMContentLoaded", () => {
       JSON.stringify(finalOutput)
     );
     submitBtn.addEventListener("click", async () => {
-      // ✅ Always get the latest values from localStorage at the moment of click
+    
       const featureScores =
         JSON.parse(localStorage.getItem("quizFinalScores")) || {};
       const sectorSelections =
@@ -506,24 +464,21 @@ document.addEventListener("DOMContentLoaded", function () {
   const plHeader = document.getElementById("plHeader");
   const storedTimePeriod = localStorage.getItem("selectedTimePeriod") || "6";
 
-  // Update the header dynamically
   plHeader.textContent = `Returns for the past ${storedTimePeriod} months`;
 
-  // ✅ Check if it's null, undefined, or literally the string "undefined"
   if (!storedDataRaw || storedDataRaw === "undefined") {
     console.warn(
       "⚠️ No valid apiResultData found in localStorage. Using empty object."
     );
-    localStorage.removeItem("apiResultData"); // Clean up invalid data
+    localStorage.removeItem("apiResultData"); 
   }
 
-  // ✅ Use an empty object `{}` as fallback
   const storedData =
     storedDataRaw && storedDataRaw !== "undefined"
       ? JSON.parse(storedDataRaw)
       : {};
 
-  const performanceData = storedData.performance || {}; // ✅ Extract performance data
+  const performanceData = storedData.performance || {}; 
 
   console.log("📊 Retrieved Performance Data:", performanceData);
 
@@ -536,7 +491,6 @@ document.addEventListener("DOMContentLoaded", function () {
     profitList.innerHTML = "<li>-</li>";
   }
 
-  // ✅ Ensure the Returns section dynamically updates with performance data
   if (performanceData && Object.keys(performanceData).length > 0) {
     stockList.innerHTML = "";
     profitList.innerHTML = "";
@@ -548,7 +502,7 @@ document.addEventListener("DOMContentLoaded", function () {
         stockList.appendChild(stockItem);
 
         let profitItem = document.createElement("li");
-        let returnVal = performanceData[stock]; // ✅ Extract return data
+        let returnVal = performanceData[stock]; 
 
         if (returnVal !== undefined) {
           profitItem.textContent = `${returnVal.toFixed(2)}%`;
@@ -568,7 +522,6 @@ document.addEventListener("DOMContentLoaded", function () {
     profitList.innerHTML = "<li>-</li>";
   }
 
-  // ✅ Handling Articles Section
   if (storedData.articles && Object.keys(storedData.articles).length > 0) {
     console.log("📰 Articles Retrieved:", storedData.articles);
 
@@ -628,20 +581,18 @@ function renderHeatmap(stockData, performanceData) {
   const baseHeight = 500;
   const sectorCount = Object.keys(stockData).length;
   const totalStocks = Object.values(stockData).flat().length;
-
-  // 🔥 Dynamically adjust height based on number of stocks & sectors
   const dynamicHeight = Math.max(
     baseHeight,
     sectorCount * 100,
     totalStocks * 50
   );
-  const sectorNames = Object.keys(stockData); // Get sector names directly
+  const sectorNames = Object.keys(stockData); 
   const longestSectorName =
     sectorNames.length > 0
       ? Math.max(...sectorNames.map((name) => name.length))
-      : 10; // Default if empty
+      : 10; 
 
-  const dynamicWidth = Math.max(900, 900 + longestSectorName * 8); // Ensure minimum width
+  const dynamicWidth = Math.max(900, 900 + longestSectorName * 8); 
 
   const container = d3.select("#sectorHeatmap");
   container.html("");
@@ -702,7 +653,6 @@ function renderHeatmap(stockData, performanceData) {
 
   treemap(root);
 
-  // Compute sector-wise average returns
   const sectorAverages = {};
   Object.entries(stockData).forEach(([sector, stocks]) => {
     const validStocks = stocks.filter(
@@ -727,11 +677,11 @@ function renderHeatmap(stockData, performanceData) {
   sectorGroups
     .append("text")
     .attr("x", (d) => (d.x1 - d.x0) / 2)
-    .attr("y", -10) // Move label higher
+    .attr("y", -10) 
     .attr("text-anchor", "middle")
     .attr("font-weight", "bold")
     .attr("font-size", "16px")
-    .text((d) => `${d.data.name} (${sectorAverages[d.data.name]}%)`); // Add avg return
+    .text((d) => `${d.data.name} (${sectorAverages[d.data.name]}%)`); 
 
   sectorGroups
     .append("rect")

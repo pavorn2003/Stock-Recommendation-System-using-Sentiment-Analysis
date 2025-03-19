@@ -217,7 +217,6 @@
   }
 }
 
-/* Main Content CSS */
 .main {
   background-color: #F8F8F8;
 }
@@ -323,7 +322,6 @@
   height: auto;
 }
 
-/* Mobile Responsive */
 @media screen and (max-width: 768px) {
   .main__container {
     display: grid;
@@ -404,7 +402,7 @@
   }
 }
 
-/* Footer General Styles */
+
 .footer__container {
   background-color: #141414;
   padding: 5rem 0;
@@ -415,7 +413,7 @@
   text-align: center;
 }
 
-/* Team Section */
+
 .team h2 {
   color: #fff;
   font-size: 24px;
@@ -459,7 +457,7 @@
   margin-bottom: 10px;
 }
 
-/* LinkedIn Icon */
+
 .linkedin-icon {
   display: flex;
   align-items: center;
@@ -478,10 +476,9 @@
 
 .linkedin-icon:hover {
   background: #0077b5;
-  /* LinkedIn Blue */
 }
 
-/* Website Rights */
+
 .website__rights {
   color: #fff;
   margin-top: 20px;
@@ -518,53 +515,42 @@
   }
 }
 
-
-/* Hero Section - Ensure Character is Visible */
 .quiz_main {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  /* Pushes character image down */
   align-items: center;
   height: 50vh;
-  /* Ensure enough space for character */
   background: radial-gradient(circle, #FB5C5C 10%, #953737 100%);
   position: relative;
   text-align: center;
   color: white;
   overflow: visible;
-  /* Allow overlap */
 }
 
 .output_main {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  /* Pushes character image down */
   align-items: center;
   height: 80vh;
-  /* Ensure enough space for character */
   background: radial-gradient(circle, #FB5C5C 10%, #953737 100%);
   position: relative;
   text-align: center;
   color: white;
   overflow: visible;
-  /* Allow overlap */
 }
 
-/* Move text higher */
 .quiz_main__container {
   position: relative;
   z-index: 2;
   padding-bottom: 15vh;
-  /* Push text much higher */
 }
 
 .output_main__container {
   position: relative;
   z-index: 2;
   padding-bottom: 35vh;
-  /* Push text much higher */
 }
 
 .quiz_main__content {
@@ -573,7 +559,6 @@
   font-size: 1.8rem;
   font-weight: bold;
   padding-bottom: 3rem;
-  /* Add space below text */
 }
 
 .output_main__content {
@@ -582,19 +567,14 @@
   font-size: 1.8rem;
   font-weight: bold;
   padding-bottom: 3rem;
-  /* Add space below text */
 }
 
-
-/* Hero Image - Ensure It Stays Visible */
 .quiz_main__image {
   position: absolute;
   bottom: -30px;
-  /* Moves character further down */
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  /* Ensures it's on top */
   width: 100%;
   display: flex;
   justify-content: center;
@@ -607,25 +587,19 @@
   object-fit: contain;
 }
 
-/* Results Section - Ensure Overlap */
 .results_section {
   background-color: white;
   margin-top: -80px;
-  /* Moves white section up slightly */
   padding-top: 140px;
-  /* Keeps proper spacing */
   padding-bottom: 50px;
   text-align: center;
   position: relative;
   z-index: 1;
 }
 
-
-/* Responsive Adjustments */
 @media (max-width: 768px) {
   .quiz_main {
     height: 80vh;
-    /* Adjust for smaller screens */
   }
 
   .quiz_main__image img {
@@ -634,7 +608,6 @@
 
   .quiz_main__container {
     padding-bottom: 40vh;
-    /* Ensure text moves much higher */
   }
 }
 
@@ -660,7 +633,6 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  /* Space between questions */
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -704,7 +676,6 @@ h2 {
   transform: scale(1.1);
 }
 
-/* Hover Effect */
 .circle:hover[data-value="strongly-disagree"] {
   background-color: purple;
   border-color: purple;
@@ -730,7 +701,6 @@ h2 {
   border-color: green;
 }
 
-/* Click Effect */
 .circle.selected-strongly-disagree {
   background-color: purple;
   border-color: purple;
@@ -756,7 +726,6 @@ h2 {
   border-color: green;
 }
 
-/* Disabled Questions (Gray Out) */
 .quiz.disabled {
   background: #ddd;
   color: #aaa;
@@ -772,10 +741,8 @@ h2 {
 .submit-btn {
   margin-top: 20px;
   padding: 14px 28px;
-  /* More padding for a better feel */
   border: none;
   background: linear-gradient(to right, #4CAF50, #2E7D32);
-  /* Smooth green gradient */
   color: white;
   font-size: 18px;
   font-weight: bold;
@@ -785,41 +752,32 @@ h2 {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
   display: inline-block;
   min-width: 180px;
-  /* Ensures consistent width */
 }
 
-/* Hover Effect */
 .submit-btn:hover {
   background: linear-gradient(to right, #388E3C, #1B5E20);
   transform: scale(1.05);
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Click Effect */
 .submit-btn:active {
   transform: scale(0.95);
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Add space below the button */
 .submit-btn-container {
   text-align: center;
   margin-bottom: 40px;
-  /* Adds space below the button */
 }
 
 .button-container {
   display: flex;
   justify-content: center;
-  /* Centers buttons */
   gap: 20px;
-  /* Space between buttons */
   margin-top: 20px;
   margin-bottom: 40px;
-  /* Adds space below buttons */
 }
 
-/* Base Button Styling */
 .quiz-btn {
   display: inline-block;
   padding: 10px 20px;
@@ -828,33 +786,25 @@ h2 {
   text-align: center;
   color: white;
   background: #222;
-  /* Darker gray */
   border: none;
   border-radius: 6px;
-  /* Slightly rounded corners */
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
   min-width: 120px;
 }
 
-/* Hover Effect */
 .quiz-btn:hover {
   background: #444;
-  /* Slightly lighter gray */
   transform: scale(1.05);
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.25);
 }
 
-/* Click Effect */
 .quiz-btn:active {
   background: #111;
-  /* Slightly darker gray for pressed effect */
   transform: scale(0.95);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 }
-
-/*Sectors Section*/
 
 .container {
   display: flex;
@@ -1010,7 +960,6 @@ h2 {
   color: #181818;
 }
 
-/* Results Section */
 .results_section {
   background-color: white;
   padding-top: 40px;
@@ -1020,7 +969,6 @@ h2 {
   z-index: 1;
 }
 
-/* Our Recommendations Heading */
 .results_section h2 {
   font-size: 2.8rem;
   font-weight: 800;
@@ -1031,29 +979,22 @@ h2 {
   position: relative;
   color: #333;
   display: inline-block;
-  /* Ensures proper width alignment */
   padding-bottom: 10px;
-  /* Space for underline */
 }
 
-/* Full-width Underline */
 .results_section h2::after {
   content: "";
   display: block;
   width: 100%;
-  /* Full width */
   height: 6px;
   background: #333;
-  /* Solid dark color */
   margin-top: 5px;
   border-radius: 5px;
 }
 
-/* Table Layout */
 .results_table {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  /* Equal column widths */
   align-items: start;
   width: 80%;
   max-width: 900px;
@@ -1065,7 +1006,6 @@ h2 {
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Ensure Headers Stay Separate */
 .column h3 {
   font-size: 1.6rem;
   font-weight: bold;
@@ -1074,24 +1014,18 @@ h2 {
   border-bottom: 3px solid #C46A6A;
   white-space: nowrap;
   display: inline-block;
-  /* Ensures underline is only as wide as text */
   width: fit-content;
-  /* Prevents merging */
 }
 
-/* Ensure Stocks and Returns Align */
 .column ul {
   list-style: none;
   padding: 0;
   margin: 0;
   display: grid;
   grid-auto-rows: minmax(40px, auto);
-  /* Ensures equal row heights */
   align-items: center;
-  /* Vertically align content */
 }
 
-/* Stock Formatting */
 .column:first-child li {
   font-size: 1.4rem;
   font-weight: bold;
@@ -1100,7 +1034,6 @@ h2 {
   letter-spacing: 0.5px;
 }
 
-/* Returns Column */
 .column:nth-child(2) {
   text-align: center;
   display: flex;
@@ -1108,14 +1041,12 @@ h2 {
   align-items: center;
 }
 
-/* Returns Font */
 .column:nth-child(2) li {
   font-size: 1.4rem;
   font-weight: bold;
   text-align: center;
 }
 
-/* Matte Color Returns */
 .green {
   color: #4B8B5F;
 }
@@ -1125,7 +1056,6 @@ h2 {
 }
 
 
-/* News Section */
 .news_section {
   background-color: #f8f8f8;
   padding: 60px 20px;
@@ -1138,7 +1068,6 @@ h2 {
   margin-bottom: 30px;
 }
 
-/* News Container */
 #newsContainer {
   display: flex;
   flex-direction: column;
@@ -1146,7 +1075,6 @@ h2 {
   gap: 20px;
 }
 
-/* News Card */
 .news_card {
   display: flex;
   align-items: center;
@@ -1161,15 +1089,10 @@ h2 {
 
 .news_image img {
   width: 80px;
-  /* Adjust width */
   height: 80px;
-  /* Adjust height */
   object-fit: cover;
-  /* Ensures proper cropping */
   border-radius: 10px;
-  /* Optional: rounded corners */
   margin-right: 15px;
-  /* ✅ Adds spacing between image & text */
 }
 
 
@@ -1232,7 +1155,6 @@ h2 {
 
 .sector-group {
   margin-right: 15px;
-  /* Adds space to the right */
 }
 
 .sector-group rect {
@@ -1256,10 +1178,8 @@ h2 {
   text-transform: uppercase;
   dominant-baseline: middle;
   padding-top: 10px;
-  /* 🔥 Ensures space between sectors */
 }
 
-/* Additional Mobile Optimizations */
 @media screen and (max-width: 768px) {
   .navbar__menu {
     flex-direction: column;
