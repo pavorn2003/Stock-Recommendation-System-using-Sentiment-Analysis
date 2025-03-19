@@ -425,7 +425,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       try {
         const response = await fetch(
-          "http://stocky.ap-southeast-2.elasticbeanstalk.com/submit-data",
+          "http://stocky.ap-southeast-1.elasticbeanstalk.com/submit-data",
           {
             method: "POST",
             headers: {
